@@ -1,0 +1,54 @@
+@charset "utf-8";
+/* CSS Document */
+html{ height:100%; border-right:#ddd 1px solid}
+body {font-family:"PingFangHK-Medium","Microsoft YaHei";font-size: 12px;margin: 0;background-color: #fff;overflow:auto;}
+li{list-style-type:none;}
+img{border-style:none;}
+p{line-height: 1.5em;}
+.menu{ width:180px; margin-bottom:10px;font-weight:100;padding:3px 0;}
+.topnav{width: 180px;padding: 5px 10px 25px 0;}
+ul.topnav {width: 100%;padding: 0;margin: 0;line-height: 20px;list-style: none;display: block;text-decoration: none;}
+ul.topnav a {display: block;text-decoration: none;}
+ul.topnav li {text-indent:0px;}
+.bor_x{ border-bottom:#ddd 1px solid;}
+ul.topnav li a {color: #666666;background-color: #fff;height:37px;line-height:37px;padding:0 10px 0 10px; border-left:#fff solid 4px;}
+ul.topnav li a:hover {background-color: #f9f9f9;}
+ul.topnav ul {margin: 0;padding: 0;display: none;}
+ul.topnav ul li {margin: 0;padding: 0;clear: both;}
+ul.topnav ul li a {background: #f5f4f7;color: #666666;padding-left:14px;border-left:#f5f4f7 solid 4px; overflow: hidden;white-space: nowrap;text-overflow: ellipsis}
+ul.topnav ul li a:hover {color:#02a2ff;background: #f5f4f7;}
+ul.topnav ul ul li a {padding-left: 24px;color:#838383;}
+ul.topnav ul ul li a:hover {color:#02a2ff;background: #f1f1f1;}
+ul.topnav ul ul ul li a {padding-left: 50px;}
+ul.topnav ul ul ul li a:hover {padding-left: 50px;}
+ul.topnav span{float:right;}
+ul.topnav ul ul li a{ background-color:#f1f1f1}
+.current{border-left:#02a2ff solid 4px !important;}
+.current2{ color:#02a2ff !important;}
+ul.topnav ul ul li .current2{ color:#333 !important;}
+/*菜单箭头*/
+.cdopen{background:url(../images/open.png) no-repeat ;width:11px;height:8px;vertical-align:middle;display:inline-block;animation: mymove .3s}
+.cdclose{background:url(../images/close.png) no-repeat ;width:11px;height:8px;vertical-align:middle;display:inline-block;animation: mymove .3s}
+.current2 .cdopen {background:url(../images/openh2.png) no-repeat;animation: mymove .3s}
+.current2 .cdclose {background:url(../images/closeh2.png) no-repeat ;animation: mymove .3s}
+@keyframes mymove
+{
+from {transform: rotate(-180deg)}
+to {transform: rotate(0deg)}
+}
+
+.dot{ width:4px; height:4px;background-color:#666666; display:inline-block;vertical-align:middle; margin-right:8px}
+ul.topnav li a:hover .dot{ width:4px; height:4px; background-color:#02a2ff; display:inline-block;vertical-align:middle;}
+.current2 .dot{ width:4px; height:4px;background-color:#02a2ff; display:inline-block;vertical-align:middle;}
+ul.topnav ul ul li .current2 .dot{ width:4px; height:12px; background-color:#02a2ff; display:inline-block;vertical-align:middle;transition:height .3s}
+
+
+.bage{display: inline-block;
+    background-color:#f88962;
+    height: 20px;
+    width: 20px;
+    text-align: center;
+    color: #fff;
+    vertical-align: middle;
+    line-height: 20px;
+    border-radius: 4px;}

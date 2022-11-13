@@ -1,0 +1,244 @@
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>网络配置管理系统-总部生产系统</title>
+		<link rel="stylesheet" href="../css/bootstrap/bootstrap.min.css" type="text/css" />
+		<link rel="stylesheet" href="../css/datetimepicker/bootstrap-datetimepicker.min.css" media="screen" />
+		<link rel="stylesheet" href="../css/font-awesome.min.css" type="text/css" />
+		<link rel="stylesheet" href="../css/selectpage.css">
+		<link rel="stylesheet" href="../css/css.css" type="text/css" />
+		<script src="../js/jquery.min.js" type="text/javascript"></script>
+		<script src="../js/bootstrap/bootstrap.min.js" type="text/javascript"></script>
+	</head>
+
+	<body>
+
+		<!--面包屑-->
+		<div class="breadcrumb"><a>方案编排</a> <span>/</span> <a>配置编排</a>
+		</div>
+
+		<!--内容-->
+		<div class="container-fluid">
+			<div class="row">
+				<div class="step2" align="center"> <a href="bp_zl_01.html"><span class="step2_title active">参数配置</span><span
+						class="step2_arrow active"></span></a> <a href="bp_zl_02.html"><span class="step2_title">指令配置</span><span
+						class="step2_arrow"></span></a> <a href="bp_zl_03.html"><span class="step2_title">指令模板配置</span><span
+						class="step2_arrow"></span></a> <a href="bp_zl_04.html"><span class="step2_title">业务制作模板配置</span><span class="step2_arrow"></a>
+				</div>
+				<div class="col-sm-3" style="padding-right:3px;">
+					<div class="panel panel-default" style="min-height: 500px;">
+						<div class="panel-heading"><h4 class="panel-title">
+									参数库
+								<span class="fa fa-refresh pull-right pointer"></span></h4></div>
+						<div class="panel-body">
+							<form class="form-horizontal">
+								<div class="form-group">
+									<div class="col-sm-6">
+										<select class="form-control input-sm busi" onchange="changeBusi('busi','wangyuan')">
+											<option>全部业务</option>
+											<option>...</option>
+											<option>...</option>
+										</select>
+									</div>
+									<div class="col-sm-6">
+										<select class="form-control input-sm wangyuan" onchange="changeWangyuan('busi','wangyuan')">
+											<option>全部网元</option>
+											<option>...</option>
+											<option>...</option>
+										</select>
+									</div>
+								</div>
+							</form>
+							<div class="bp_zl_cs" style="overflow-y: auto; height:calc(500px - 130px)">
+								<span onclick="bpq.style.display='block';canshuInit()">$(e164AF)</span>
+								<span>$(CSA)</span>
+								<span>$(e166AF)</span>
+								<span>$(CSAE)</span>
+								<span>$(RSC)</span>
+								<span>$(MINL)</span>
+								<span>$(MAXL)</span>
+								<span>$(DEST)</span>
+								<span>$(ICLDTYPE)</span>
+								<span>$(sDescription)</span>
+								<!-- <span style="display:none;" id="cs_new">$(new)</span> -->
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-9" style="padding-left:0px">
+					<div class="panel panel-default" style="min-height: 500px;">
+						<div class="panel-heading"><h4 class="panel-title">
+									编排区<span class="fa fa-refresh pull-right pointer" onclick="clear()"></span>
+								</h4></div>
+						<div class="panel-body"  style="display: none;" id="bpq">
+							<h4 align="center" id="canshuId">$(e164AF)</h4>
+							<table class="table table-bordered">
+
+								<tbody>
+
+									<tr>
+										<th width="100">业务</th>
+										<td id="bpqBusi"><input type="text" id="_busi" value="全网呼叫中心短号码"></td>
+									</tr>
+									<tr>
+										<th width="100">网元</th>
+										<td id="bpqWangyuan">CMN</td>
+									</tr>
+									<tr>
+										<th width="100">厂商</th>
+										<td id="bpqVendor">华为</td>
+									</tr>
+									<tr>
+										<th width="100">版本</th>
+										<td id="bpqVersion"></td>
+									</tr>
+									<tr>
+										<th width="100">规则</th>
+										<td id="bpqRule">取值工单中业务号码字段值</td>
+									</tr>
+									<tr>
+										<td colspan="2" align="center"><button type="button"
+												class="btn btn-submit btn-sm" onclick="modify()"><span
+													class="fa fa-copy "></span>
+												修改</button>
+                        <button type="button"
+                        class="btn btn-submit btn-sm" onclick="fzcj.style.display='table';initNew()"><span
+                          class="fa fa-copy "></span>
+                        复制参数</button>
+                    </td>
+									</tr>
+								</tbody>
+							</table>
+							<br>
+							<table class="table table-bordered " style="display: none;" id="fzcj">
+								<tbody>
+									<tr>
+										<th width="100">名称 <span class="text-danger">*</span></th>
+										<td>
+											<form class="form-inline" style="margin-bottom: 0;">
+												<div class="form-group" style="margin-bottom: 0;">
+													<input id="_new_name" class="form-control input-sm" style="width: 200px;"
+														placeholder="如：e164AF">
+													<span class="text-muted"> 自定义参数名称，系统唯一</span>
+												</div>
+											</form>
+										</td>
+									</tr>
+									<tr>
+										<th>业务 <span class="text-danger">*</span></th>
+										<td>
+                      <select id="_new_busi" class="form-control input-sm busi3" style="width: 200px;" onchange="changeBusi('busi3','wangyuan3')">
+                        <option value="all">全部业务</option>
+										  </select>
+                    </td>
+									</tr>
+									<tr>
+										<th>网元 <span class="text-danger">*</span></th>
+										<td>
+                      <select id="_new_wangyuan" class="form-control input-sm wangyuan3" style="width: 200px;">
+												<option value="all">全部网元</option>
+											</select>
+                    </td>
+									</tr>
+									<tr>
+										<th>厂商 <span class="text-danger">*</span></th>
+										<td>
+                      <form class="form-inline" style="margin-bottom: 0;">
+												<div class="form-group" style="margin-bottom: 0;">
+													<input id="_new_vendor" class="form-control input-sm" style="width: 200px;"
+														placeholder="如：华为">
+												</div>
+											</form>
+                    </td>
+									</tr>
+									<tr>
+										<th>版本</th>
+										<td>
+                      <form class="form-inline" style="margin-bottom: 0;">
+												<div class="form-group" style="margin-bottom: 0;">
+													<input id="_new_version" class="form-control input-sm" style="width: 200px;"
+														placeholder="如：v1.3">
+												</div>
+											</form>
+                    </td>
+									</tr>
+									<tr>
+										<th>规则</th>
+										<td>                      
+                      <form class="form-inline" style="margin-bottom: 0;">
+                      <div class="form-group" style="margin-bottom: 0;">
+                        <input id="_new_rule" class="form-control input-sm" style="width: 200px;"
+                          placeholder="如：my rule">
+                      </div>
+                    </form></td>
+									</tr>
+									<tr>
+										<td colspan="2" align="center"><button type="button" onclick="create()"
+												class="btn btn-submit btn-sm" data-toggle="modal"><span class="fa fa-check "></span> 提交
+												</button></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+<!-- Modal -->
+<div class="modal fade bs-example-modal-sm" id="myModal5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h5 class="modal-title"><strong>提示</strong></h5>
+      </div>
+      <div class="modal-body"> 新增参数<span class="text-danger" id="newModelName" >【$(new)】</span>成功 </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-submit btn-sm" data-dismiss="modal" onclick="bpq.style.display='none'"><span class="fa fa-check"></span> 确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade bs-example-modal-sm" id="myModal6" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h5 class="modal-title"><strong>提示</strong></h5>
+      </div>
+      <div class="modal-body"> 修改参数<span class="text-danger" id="modifyModelName" >【$(new)】</span>成功 </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-submit btn-sm" data-dismiss="modal" onclick="bpq.style.display='none'"><span class="fa fa-check"></span> 确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+		<!--时间日历-->
+		<script type="text/javascript" src="../js/datetimepicker/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+		<script type="text/javascript" src="../js/datetimepicker/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8">
+		</script>
+		<script src="../js/jquery.cxselect.js" type="text/javascript"></script>
+		<script src="../js/selectpage.min.js" type="text/javascript"></script>
+		<!-- <script src="../js/common.js" type="text/javascript"></script> -->
+		<script src="../js/jquery.nicescroll.js" type="text/javascript"></script>
+		<!---滚动条js，一定放最后--->
+		<script src="../js/scroll.js" type="text/javascript"></script>
+		<!---滚动条样式--->
+    <script src="../js/mock.js"></script>
+    <script src="../js/bp_zl_01.js"></script>
+		<script>
+			$(".bp_hc_tk span").click(function() {
+				$(this).toggleClass("active");
+			});
+			$("#hcb").click(function() {
+				$('#hc_zd').toggleClass("ycxs");
+			});
+		</script>
+	</body>
+</html>

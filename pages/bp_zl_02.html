@@ -1,0 +1,419 @@
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>网络配置管理系统-总部生产系统</title>
+		<link rel="stylesheet" href="../css/bootstrap/bootstrap.min.css" type="text/css" />
+		<link rel="stylesheet" href="../css/datetimepicker/bootstrap-datetimepicker.min.css" media="screen" />
+		<link rel="stylesheet" href="../css/font-awesome.min.css" type="text/css" />
+		<link rel="stylesheet" href="../css/selectpage.css">
+		<link rel="stylesheet" href="../css/css.css" type="text/css" />
+		<script src="../js/jquery.min.js" type="text/javascript"></script>
+		<script src="../js/bootstrap/bootstrap.min.js" type="text/javascript"></script>
+	</head>
+
+	<body>
+
+		<!--面包屑-->
+		<div class="breadcrumb"><a>方案编排</a> <span>/</span> <a>配置编排</a>
+		</div>
+
+		<!--内容-->
+		<div class="container-fluid">
+			<div class="row">
+				<div class="step2" align="center"> <a href="bp_zl_01.html"><span class="step2_title">参数配置</span><span
+							class="step2_arrow"></span></a> <a href="bp_zl_02.html"><span
+							class="step2_title active">指令配置</span><span class="step2_arrow active"></span></a> <a
+						href="bp_zl_03.html"><span class="step2_title">指令模板配置</span><span
+							class="step2_arrow"></span></a> <a href="bp_zl_04.html"><span
+							class="step2_title">业务制作模板配置</span><span class="step2_arrow"></a>
+				</div>
+				<div class="col-sm-3" style="padding-right:3px;">
+					<div class="panel panel-default" style="min-height:250px; margin-bottom: 3px;">
+						<div class="panel-heading"><h4 class="panel-title">
+									指令库<span class="fa fa-refresh pull-right pointer"></span><a class="pull-right" href="#" style="margin-right: 10px;" onclick="bpq2.style.display='block',bpq.style.display='none'">新增</a></span>
+								</h4></div>
+						<div class="panel-body">
+							<form class="form-horizontal">
+								<div class="form-group">
+									<div class="col-sm-6">
+										<select class="form-control input-sm">
+											<option>全部业务</option>
+											<option>...</option>
+											<option>...</option>
+										</select>
+									</div>
+									<div class="col-sm-6">
+										<select class="form-control input-sm">
+											<option>全部网元</option>
+											<option>...</option>
+											<option>...</option>
+										</select>
+									</div>
+								</div>
+							</form>
+							<div class="bp_zl_cs">
+								<span onclick="bpq.style.display='block';bpq2.style.display='none';glcs.style.display='block';ycs.style.display='none'">CMN_新增</span>
+								<span>CMN_修改</span>
+								<span>CMN_删除</span>
+								<span>CMN_采集</span>
+								<span style="display:none;" id="cs_new">NEW_新增</span>
+							</div>
+						</div>
+					</div>
+					<div class="panel panel-default" style="min-height:250px;">
+						<div class="panel-heading"><h4 class="panel-title">
+									参数库<span class="fa fa-refresh pull-right pointer"></span>
+								</h4></div>
+						<div class="panel-body">
+							<form class="form-horizontal" id="ycs">
+								<div class="form-group">
+									<div class="col-sm-6">
+										<select class="form-control input-sm">
+											<option>全部业务</option>
+											<option>...</option>
+											<option>...</option>
+										</select>
+									</div>
+									<div class="col-sm-6">
+										<select class="form-control input-sm">
+											<option>全部网元</option>
+											<option>...</option>
+											<option>...</option>
+										</select>
+									</div>
+								</div>
+							</form>
+							<form class="form-horizontal" id="glcs" style="display: none;">
+								<div class="form-group">
+									<div class="col-sm-6">
+										<select class="form-control input-sm">
+											<option>全部业务</option>
+											<option selected="selected">全网呼叫中心短号码</option>
+											<option>...</option>
+										</select>
+									</div>
+									<div class="col-sm-6">
+										<select class="form-control input-sm">
+											<option>全部网元</option>
+											<option selected="selected">CMN</option>
+											<option>...</option>
+										</select>
+									</div>
+								</div>
+							</form>
+							<div class="bp_zl_cs">
+								<span>$(e164AF)</span>
+								<span>$(CSA)</span>
+								<span>$(e166AF)</span>
+								<span>$(CSAE)</span>
+								<span>$(RSC)</span>
+								<span>$(MINL)</span>
+								<span>$(MAXL)</span>
+								<span>$(DEST)</span>
+								<span>$(ICLDTYPE)</span>
+								<span>$(sDescription)</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-9" style="padding-left:0px">
+					<div class="panel panel-default" style="min-height: 500px;">
+						<div class="panel-heading"><h4 class="panel-title">
+									编排区<span class="fa fa-refresh pull-right pointer"></span>
+								</h4></div>
+						<div class="panel-body" id="bpq" style="display: none;">
+							<div class="leave-message-textarea" contenteditable="true">ADD CNACLD: P=0, pfx=K'<span>$(2)</span>,CSA=<span>$(CSA)</span>, RSC=<span>$(RSC)</span>, MINL=<span>$(MINL)</span>, MAXL=<span>$(MAXL)</span>, DEST=<span>$(DEST)</span>, ICLDTYPE=<span>$(ICLDTYPE)</span>,sDescription="<span>$(sDescription)</span>";</div>
+							<br>
+							<table class="table table-bordered">
+								<tbody>
+									<tr>
+										<th  width="140">网元归属<span class="text-danger">*</span></th>
+										<td>NFV</td>
+									</tr>
+									<tr>
+										<th>网元名称<span class="text-danger">*</span></th>
+										<td>CMN</td>
+									</tr>
+									<tr>
+										<th>设备厂商<span class="text-danger">*</span></th>
+										<td>华为</td>
+									</tr>
+									<tr>
+										<th>指令名称<span class="text-danger">*</span></th>
+										<td>CMN_新增</td>
+									</tr>
+									<tr>
+										<th>指令类型<span class="text-danger">*</span></th>
+										<td><select class="form-control input-sm" style="width: 200px;">
+												<option>新增</option>
+												<option>修改</option>
+												<option>删除</option>
+												<option>采集</option>
+												<option>回滚</option>
+												<option>其他</option>
+											</select></td>
+									</tr>
+									<tr>
+										<th>金库指令<span class="text-danger">*</span></th>
+										<td><select class="form-control input-sm" style="width: 200px;">
+												<option selected="selected">否</option>
+												<option>是</option>
+											</select></td>
+									</tr>
+									<tr>
+										<th>指令描述</th>
+										<td><textarea class="form-control input-sm"></textarea></td>
+									</tr>
+									<tr>
+										<th>指令结束符</th>
+										<td><input type="text" class="form-control input-sm" style="width: 200px;"></td>
+									</tr>
+									<tr>
+										<th>指令确认符</th>
+										<td><input type="text" class="form-control input-sm" style="width: 200px;"></td>
+									</tr>
+									<tr>
+										<th>命令行提示符</th>
+										<td><input type="text" class="form-control input-sm" style="width: 200px;"></td>
+									</tr>
+									<tr>
+										<th>命令执行成功标识符</th>
+										<td>
+											<div class="input-group" style="width: 200px;">
+												<input type="text" class="form-control input-sm">
+												<div class="input-group-addon pointer"><span class="fa fa-plus"></span>
+												</div>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<th>命令执行失败标识符</th>
+										<td>
+											<div class="input-group" style="width: 200px;">
+												<input type="text" class="form-control input-sm">
+												<div class="input-group-addon pointer"><span class="fa fa-plus"></span>
+												</div>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<th>应答标识符</th>
+										<td>
+											<div class="input-group" style="width: 200px;">
+												<input type="text" class="form-control input-sm">
+												<div class="input-group-addon pointer"><span class="fa fa-plus"></span>
+												</div>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<th>读取超时时间</th>
+										<td>
+											<div class="input-group" style="width: 200px;">
+												<input type="text" class="form-control input-sm">
+												<div class="input-group-addon">ms</div>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<th>等待超时时间</th>
+										<td>
+											<div class="input-group" style="width: 200px;">
+												<input type="text" class="form-control input-sm">
+												<div class="input-group-addon">ms</div>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2" align="center"><button type="button"
+												class="btn btn-submit btn-sm" data-toggle="modal" data-target="#myModal6"><span class="fa fa-check "></span> 修改
+												</button></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						
+						<div class="panel-body" id="bpq2" style="display: none;">
+							<div class="leave-message-textarea" contenteditable="true"></div>
+							<br>
+							<table class="table table-bordered">
+								<tbody>
+									<tr>
+										<th  width="140">网元归属<span class="text-danger">*</span></th>
+										<td><select class="form-control input-sm" style="width: 200px;">
+												<option>请选择</option>
+												<option>...</option>
+												<option>...</option>
+											</select></td>
+									</tr>
+									<tr>
+										<th>网元名称<span class="text-danger">*</span></th>
+										<td><select class="form-control input-sm" style="width: 200px;">
+												<option>请选择</option>
+												<option>...</option>
+												<option>...</option>
+											</select></td>
+									</tr>
+									<tr>
+										<th>设备厂商<span class="text-danger">*</span></th>
+										<td><select class="form-control input-sm" style="width: 200px;">
+												<option>请选择</option>
+												<option>...</option>
+												<option>...</option>
+											</select></td>
+									</tr>
+									<tr>
+										<th>指令名称<span class="text-danger">*</span></th>
+										<td><input type="text" class="form-control input-sm" style="width: 200px;"></td>
+									</tr>
+									<tr>
+										<th>指令类型<span class="text-danger">*</span></th>
+										<td><select class="form-control input-sm" style="width: 200px;">
+												<option>新增</option>
+												<option>修改</option>
+												<option>删除</option>
+												<option>采集</option>
+												<option>回滚</option>
+												<option>其他</option>
+											</select></td>
+									</tr>
+									<tr>
+										<th>金库指令<span class="text-danger">*</span></th>
+										<td><select class="form-control input-sm" style="width: 200px;">
+												<option selected="selected">否</option>
+												<option>是</option>
+											</select></td>
+									</tr>
+									<tr>
+										<th>指令描述</th>
+										<td><textarea class="form-control input-sm"></textarea></td>
+									</tr>
+									<tr>
+										<th>指令结束符</th>
+										<td><input type="text" class="form-control input-sm" style="width: 200px;"></td>
+									</tr>
+									<tr>
+										<th>指令确认符</th>
+										<td><input type="text" class="form-control input-sm" style="width: 200px;"></td>
+									</tr>
+									<tr>
+										<th>命令行提示符</th>
+										<td><input type="text" class="form-control input-sm" style="width: 200px;"></td>
+									</tr>
+									<tr>
+										<th>命令执行成功标识符</th>
+										<td>
+											<div class="input-group" style="width: 200px;">
+												<input type="text" class="form-control input-sm">
+												<div class="input-group-addon pointer"><span class="fa fa-plus"></span>
+												</div>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<th>命令执行失败标识符</th>
+										<td>
+											<div class="input-group" style="width: 200px;">
+												<input type="text" class="form-control input-sm">
+												<div class="input-group-addon pointer"><span class="fa fa-plus"></span>
+												</div>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<th>应答标识符</th>
+										<td>
+											<div class="input-group" style="width: 200px;">
+												<input type="text" class="form-control input-sm">
+												<div class="input-group-addon pointer"><span class="fa fa-plus"></span>
+												</div>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<th>读取超时时间</th>
+										<td>
+											<div class="input-group" style="width: 200px;">
+												<input type="text" class="form-control input-sm">
+												<div class="input-group-addon">ms</div>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<th>等待超时时间</th>
+										<td>
+											<div class="input-group" style="width: 200px;">
+												<input type="text" class="form-control input-sm">
+												<div class="input-group-addon">ms</div>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2" align="center"><button type="button"
+												class="btn btn-submit btn-sm" data-toggle="modal" data-target="#myModal5"><span class="fa fa-check "></span> 提交
+												</button></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+<!-- Modal -->
+<div class="modal fade bs-example-modal-sm" id="myModal5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h5 class="modal-title"><strong>提示</strong></h5>
+      </div>
+      <div class="modal-body"> 新增指令<span class="text-danger" >【NEW_新增】</span>成功 </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-submit btn-sm" data-dismiss="modal" onclick="bpq2.style.display='none',cs_new.style.display='inline-block'"><span class="fa fa-check"></span> 确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade bs-example-modal-sm" id="myModal6" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h5 class="modal-title"><strong>提示</strong></h5>
+      </div>
+      <div class="modal-body"> 修改指令<span class="text-danger" >【CMN_新增】</span>成功 </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-submit btn-sm" data-dismiss="modal" onclick="bpq.style.display='none'"><span class="fa fa-check"></span> 确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+		<!--时间日历-->
+		<script type="text/javascript" src="../js/datetimepicker/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+		<script type="text/javascript" src="../js/datetimepicker/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8">
+		</script>
+		<script src="../js/jquery.cxselect.js" type="text/javascript"></script>
+		<script src="../js/selectpage.min.js" type="text/javascript"></script>
+		<script src="../js/common.js" type="text/javascript"></script>
+		<script src="../js/jquery.nicescroll.js" type="text/javascript"></script>
+		<!---滚动条js，一定放最后--->
+		<script src="../js/scroll.js" type="text/javascript"></script>
+		<!---滚动条样式--->
+
+
+		<script>
+			var $textarea = $('textarea[name=intro]');
+
+			var html = $textarea.val();
+
+			$textarea.val($(html).text());
+		</script>
+	</body>
+</html>

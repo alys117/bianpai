@@ -1,0 +1,34 @@
+{
+  "code": 200,
+  "data": {
+    "busiList":[
+      {"id":"busi1","name":"业务1"},
+      {"id":"busi2","name":"业务2"},
+      {"id":"busi3","name":"业务3"}
+    ],
+    "wangyuanList":[
+      {"id":"wangyuan1","name":"网元1", "busiId":"busi1"},
+      {"id":"wangyuan2","name":"网元2", "busiId":"busi1"},
+      {"id":"wangyuan3","name":"网元3", "busiId":"busi2"},
+      {"id":"wangyuan4","name":"网元4", "busiId":"busi2"},
+      {"id":"wangyuan5","name":"网元5", "busiId":"busi3"},
+      {"id":"wangyuan6","name":"网元6", "busiId":"busi3"}
+    ],
+    "canshuList": [
+      {"id":"a1","name":"e164AF", "busiId":"busi1", "wangyuanId":"wangyuan1","vendor":"华为","version":"v123","rule":"my rule1"},
+      {"id":"a2","name":"CSA", "busiId":"busi1", "wangyuanId":"wangyuan1","vendor":"华为","version":"v123","rule":"my rule2"},
+      {"id":"a3","name":"e166AF", "busiId":"busi2", "wangyuanId":"wangyuan3","vendor":"华为","version":"v123","rule":"my rule3"},
+      {"id":"a4","name":"CSAE", "busiId":"busi2", "wangyuanId":"wangyuan4","vendor":"华为","version":"v123","rule":"my rule4"},
+      {"id":"a5","name":"RSC", "busiId":"busi3", "wangyuanId":"wangyuan5","vendor":"华为","version":"v123","rule":"my rule5"},
+      {"id":"a6","name":"MINL", "busiId":"busi1", "wangyuanId":"wangyuan2","vendor":"华为","version":"v123","rule":"my rule6"},
+      {"id":"a7","name":"MAXL", "busiId":"busi2", "wangyuanId":"wangyuan4","vendor":"华为","version":"v123","rule":"my rule7"},
+      {"id":"a8","name":"DEST", "busiId":"busi2", "wangyuanId":"wangyuan1","vendor":"华为","version":"v123","rule":"my rule8"},
+      {"id":"a9","name":"ICLDTYPE", "busiId":"busi1", "wangyuanId":"wangyuan1","vendor":"华为","version":"v123","rule":"my rule9"},
+      {"id":"a10","name":"sDescription", "busiId":"busi1", "wangyuanId":"wangyuan1","vendor":"华为","version":"v123","rule":"my rule10"},
+      {"id":"a11","name":"test11", "busiId":"busi1", "wangyuanId":"wangyuan1","vendor":"华为","version":"v123","rule":"my rule11"},
+      {"id":"a12","name":"test12", "busiId":"busi1", "wangyuanId":"wangyuan1","vendor":"华为","version":"v123","rule":"my rule12"},
+      {"id":"a13","name":"test13", "busiId":"busi1", "wangyuanId":"wangyuan1","vendor":"华为","version":"v123","rule":"my rule13"},
+      {"id":"a14","name":"test14", "busiId":"busi1", "wangyuanId":"wangyuan1","vendor":"华为","version":"v123","rule":"my rule14"},
+      {"id":"a15","name":"test15", "busiId":"busi1", "wangyuanId":"wangyuan1","vendor":"华为","version":"v123","rule":"my rule15"}
+  ]}
+}

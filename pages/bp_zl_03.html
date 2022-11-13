@@ -1,0 +1,288 @@
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>网络配置管理系统-总部生产系统</title>
+		<link rel="stylesheet" href="../css/bootstrap/bootstrap.min.css" type="text/css" />
+		<link rel="stylesheet" href="../css/datetimepicker/bootstrap-datetimepicker.min.css" media="screen" />
+		<link rel="stylesheet" href="../css/font-awesome.min.css" type="text/css" />
+		<link rel="stylesheet" href="../css/selectpage.css">
+		<link rel="stylesheet" href="../css/css.css" type="text/css" />
+		<script src="../js/jquery.min.js" type="text/javascript"></script>
+		<script src="../js/bootstrap/bootstrap.min.js" type="text/javascript"></script>
+	</head>
+
+	<body>
+
+		<!--面包屑-->
+		<div class="breadcrumb"><a>方案编排</a> <span>/</span> <a>配置编排</a>
+		</div>
+
+		<!--内容-->
+		<div class="container-fluid">
+			<div class="row">
+				<div class="step2" align="center"> <a href="bp_zl_01.html"><span class="step2_title">参数配置</span><span
+						class="step2_arrow"></span></a> <a href="bp_zl_02.html"><span class="step2_title">指令配置</span><span
+						class="step2_arrow"></span></a> <a href="bp_zl_03.html"><span class="step2_title active">指令模板配置</span><span
+						class="step2_arrow active"></span></a> <a href="bp_zl_04.html"><span class="step2_title">业务制作模板配置</span><span class="step2_arrow"></a>
+				</div>
+				<div class="col-sm-3" style="padding-right:3px;">
+					<div class="panel panel-default" style="min-height: 250px; margin-bottom: 3px;">
+						<div class="panel-heading"><h4 class="panel-title">
+									指令库<span class="fa fa-refresh pull-right pointer"></span>
+								</h4></div>
+						<div class="panel-body">
+							<form class="form-horizontal" id="ycs">
+								<div class="form-group">
+									<div class="col-sm-6">
+										<select class="form-control input-sm">
+											<option>全部业务</option>
+											<option>...</option>
+											<option>...</option>
+										</select>
+									</div>
+									<div class="col-sm-6">
+										<select class="form-control input-sm">
+											<option>全部网元</option>
+											<option>...</option>
+											<option>...</option>
+										</select>
+									</div>
+								</div>
+							</form>
+							<form class="form-horizontal" id="glcs" style="display: none;">
+								<div class="form-group">
+									<div class="col-sm-6">
+										<select class="form-control input-sm">
+											<option>全部业务</option>
+											<option selected="selected">全网呼叫中心短号码</option>
+											<option>...</option>
+										</select>
+									</div>
+									<div class="col-sm-6">
+										<select class="form-control input-sm">
+											<option>全部网元</option>
+											<option selected="selected">CMN</option>
+											<option>...</option>
+										</select>
+									</div>
+								</div>
+							</form>
+							<div class="bp_zl_cs">
+								<span  onclick="bpq.style.display='block',bpq02.style.display='none'">CMN_新增</span>
+								<span>CMN_修改</span>
+								<span>CMN_删除</span>
+								<span>CMN_采集</span>
+								<span onclick="cj_new.style.display='block'">NEW_新增</span>
+							</div>
+						</div>
+					</div>
+					<div class="panel panel-default" style="min-height: 250px;">
+						<div class="panel-heading"><h4 class="panel-title">
+									指令模板库<span class="fa fa-refresh pull-right pointer"></span>
+								</h4></div>
+						<div class="panel-body">
+							<form class="form-horizontal">
+								<div class="form-group">
+									<div class="col-sm-6">
+										<select class="form-control input-sm">
+											<option>全部业务</option>
+											<option>...</option>
+											<option>...</option>
+										</select>
+									</div>
+									<div class="col-sm-6">
+										<select class="form-control input-sm">
+											<option>全部网元</option>
+											<option>...</option>
+											<option>...</option>
+										</select>
+									</div>
+								</div>
+							</form>
+							<div class="bp_zl_cs">
+								<span onclick="bpq02.style.display='block',bpq.style.display='none';glcs.style.display='block';ycs.style.display='none'"">CMN_短号码_新增_制作模板</span>
+								<span>CMN_短号码_修改_制作模板</span>
+								<span>CMN_短号码_删除_制作模板</span>
+								<span>CMN_号段/设备号码_新增_制作模板</span>
+								<span>CMN_短号码/号段/设备号码_采集_全量采集模板</span>
+								<span id="mb_new" style="display: none;">NEW_短号码_新增_制作模板</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-9" style="padding-left:0px">
+					<div class="panel panel-default" style="min-height: 500px;">
+						<div class="panel-heading"><h4 class="panel-title">
+									编排区<span class="fa fa-refresh pull-right pointer"></span>
+								</h4></div>
+						<div class="panel-body" id="bpq" style="display: none;">
+							<span class="fa fa-trash-o sc_dw"></span>
+							<pre>ADD CNACLD: P=0, pfx=K'$(e164AF), CSA=$(CSA), RSC=$(RSC), MINL=$(MINL), MAXL=$(MAXL), DEST=$(DEST), ICLDTYPE=$(ICLDTYPE), sDescription="$(sDescription)";</pre>
+							<div id="cj_new" style="display: none;"><span class="fa fa-trash-o sc_dw"></span>
+							<pre >ADD CNACLD: P=0, pfx=K'$(e164AF), CSA=$(CSA), RSC=$(RSC), MINL=$(MINL), MAXL=$(MAXL), DEST=$(DEST), ICLDTYPE=$(ICLDTYPE), sDescription="$(sDescription)";</pre>
+							</div><br>
+							<table class="table table-bordered">
+
+								<tbody>
+
+									<tr>
+										<th width="100">网元归属</th>
+										<td><select class="form-control input-sm" style="width: 200px;" >
+												<option>NFV</option>
+												<option>一干</option>
+											</select></td>
+									</tr>
+									<tr>
+										<th>网元名称</th>
+										<td><select class="form-control input-sm" style="width: 200px;" >
+												<option>...</option>
+												<option>...</option>
+												<option>...</option>
+											</select></td>
+									</tr>
+									<tr>
+										<th>厂商</th>
+										<td><select class="form-control input-sm" style="width: 200px;">
+												<option>...</option>
+												<option>...</option>
+											</select></td>
+									</tr>
+									<tr>
+										<th>模板类型</th>
+										<td><select class="form-control input-sm" style="width: 200px;" >
+												<option>制作</option>
+												<option>全量采集</option>
+												<option>增量采集</option>
+											</select></td>
+									</tr>
+									<tr>
+										<th>模板名称</th>
+										<td><input type="text" class="form-control input-sm" style="width: 400px;" placeholder="例如：CMN_短号码_新增_制作模板（必须按规范命名）"></td>
+									</tr>
+									<tr>
+										<th>描述</th>
+										<td><textarea class="form-control input-sm"></textarea></td>
+									</tr>
+									
+									<tr>
+										<td colspan="2" align="center"><button type="button"
+												class="btn btn-submit btn-sm" data-toggle="modal" data-target="#myModal6"><span
+													class="fa fa-check "></span>
+												新增</button></td>
+									</tr>
+								</tbody>
+							</table>
+
+						</div>
+						
+						<div class="panel-body" id="bpq02" style="display: none;">
+							<span class="fa fa-trash-o sc_dw"></span>
+							<pre>ADD CNACLD: P=0, pfx=K'$(e164AF), CSA=$(CSA), RSC=$(RSC), MINL=$(MINL), MAXL=$(MAXL), DEST=$(DEST), ICLDTYPE=$(ICLDTYPE), sDescription="$(sDescription)";</pre>
+							<span class="fa fa-trash-o sc_dw"></span>
+							<pre>ADD CNACLD: P=0, pfx=K'$(e164AF), CSA=$(CSA), RSC=$(RSC), MINL=$(MINL), MAXL=$(MAXL), DEST=$(DEST), ICLDTYPE=$(ICLDTYPE), sDescription="$(sDescription)";</pre>
+							<span class="fa fa-trash-o sc_dw"></span>
+							<pre>ADD CNACLD: P=0, pfx=K'$(e164AF), CSA=$(CSA), RSC=$(RSC), MINL=$(MINL), MAXL=$(MAXL), DEST=$(DEST), ICLDTYPE=$(ICLDTYPE), sDescription="$(sDescription)";</pre>
+							<br>
+							<table class="table table-bordered">
+						
+								<tbody>
+						
+									<tr>
+										<th width="100">网元归属</th>
+										<td>NFV</td>
+									</tr>
+									<tr>
+										<th>网元名称</th>
+										<td>CMN</td>
+									</tr>
+									<tr>
+										<th>厂商</th>
+										<td>华为</td>
+									</tr>
+									<tr>
+										<th>模板类型</th>
+										<td>制作</td>
+									</tr>
+									<tr>
+										<th>模板名称</th>
+										<td><input type="text" class="form-control input-sm" style="width: 400px;" placeholder="例如：CMN_短号码_新增_制作模板（必须按规范命名）" value="CMN_短号码_新增_制作模板"></td>
+									</tr>
+									<tr>
+										<th>描述</th>
+										<td><textarea class="form-control input-sm"></textarea></td>
+									</tr>
+									
+									<tr>
+										<td colspan="2" align="center"><button type="button"
+												class="btn btn-submit btn-sm" data-toggle="modal" data-target="#myModal5"><span
+													class="fa fa-check" ></span>
+												提交</button></td>
+									</tr>
+								</tbody>
+							</table>
+						
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+<!-- Modal -->
+<div class="modal fade bs-example-modal-sm" id="myModal5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h5 class="modal-title"><strong>提示</strong></h5>
+      </div>
+      <div class="modal-body"> 修改指令库模板<span class="text-danger" >【CMN_短号码_新增_制作模板】</span>成功 </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-submit btn-sm" data-dismiss="modal" onclick="bpq02.style.display='none'"><span class="fa fa-check"></span> 确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade bs-example-modal-sm" id="myModal6" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h5 class="modal-title"><strong>提示</strong></h5>
+      </div>
+      <div class="modal-body"> 新增指令库模板<span class="text-danger" >【NEW_短号码_新增_制作模板】</span>成功 </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-submit btn-sm" data-dismiss="modal" onclick="bpq.style.display='none',mb_new.style.display='inline-block'"><span class="fa fa-check"></span> 确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+		<!--时间日历-->
+		<script type="text/javascript" src="../js/datetimepicker/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+		<script type="text/javascript" src="../js/datetimepicker/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8">
+		</script>
+		<script src="../js/jquery.cxselect.js" type="text/javascript"></script>
+		<script src="../js/selectpage.min.js" type="text/javascript"></script>
+		<script src="../js/common.js" type="text/javascript"></script>
+		<script src="../js/jquery.nicescroll.js" type="text/javascript"></script>
+		<!---滚动条js，一定放最后--->
+		<script src="../js/scroll.js" type="text/javascript"></script>
+		<!---滚动条样式--->
+
+
+		<script>
+			var $textarea = $('textarea[name=intro]');
+
+			var html = $textarea.val();
+
+			$textarea.val($(html).text());
+		</script>
+	</body>
+</html>
