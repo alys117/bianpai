@@ -5,11 +5,10 @@ var apiConfig = {
     callback: function(res) {
       console.log(res)
       window.canshu = res.data
-      $(".bp_zl_cs").html('')
+      $(".canshu").html('')
       $.each(res.data.canshuList, function(index, item) {
-        $(".bp_zl_cs").append("<span data-id='"+item.id+"' onclick=\"canshuInit()\">$(" + item.name + ")</span>\n")
+        $(".canshu").append("<span data-id='"+item.id+"' onclick=\"todo1()\">$(" + item.name + ")</span>\n")
       })
-
       $(".busi").html('<option value="all">全部业务</option>\n')
       $.each(res.data.busiList, function(index, item) {
         $(".busi").append("<option value="+item.id+">" + item.name + "</option>\n")
@@ -18,6 +17,17 @@ var apiConfig = {
       $(".wangyuan").html('<option value="all">全部网元</option>\n')
       $.each(res.data.wangyuanList, function(index, item) {
         // $(".wangyuan").append("<option value="+item.id+">" + item.name + "</option>\n")
+      })
+    }
+  },
+  'zhiling': {
+    url: "../mock/zhiling.json",
+    callback: function(res) {
+      console.log(res)
+      window.zhiling = res.data
+      $(".zhiling").html('')
+      $.each(res.data.zhilingList, function(index, item) {
+        $(".zhiling").append("<span data-id='"+item.id+"' onclick=\"zhilingInit()\">$(" + item.name + ")</span>\n")
       })
     }
   },
@@ -90,35 +100,8 @@ function filterCanshu(canshuList) {
   })
 }
 
-function canshuInit(id){
-  console.log(id,'1112222', event);
-  var canshuId = id || event.target.dataset.id
-  if(!canshuId) return
-  bpq.style.display='block';
-  var canshu = window.canshu.canshuList.find(function(item){
-    return item.id === canshuId
-  })
-  $('#bpq #canshuId').html('$(' + canshu.name + ')') 
-  $('#bpq #canshuId').attr('data-id',canshu.id);
-  $('#bpq #bpqBusi').html('<select id="_busiId" class="form-control input-sm busi2" style="width: 200px;" onchange=changeBusi(\'busi2\',\'wangyuan2\')><option value="all">全部业务</option></select>')
-  window.canshu.busiList.forEach(function(item){
-    if(item.id === canshu.busiId){
-      $('#bpq #_busiId').append('<option value="'+item.id+'" selected>'+item.name+'</option>')
-    }else{
-      $('#bpq #_busiId').append('<option value="'+item.id+'" >'+item.name+'</option>')
-    }
-  })
-  $('#bpq #bpqWangyuan').html('<select id="_wangyuanId" class="form-control input-sm wangyuan2" style="width: 200px;"><option value="all">全部网元</option></select>')
-  window.canshu.wangyuanList.forEach(function(item){
-    if(item.id === canshu.wangyuanId && item.busiId === canshu.busiId){
-      $('#bpq #_wangyuanId').append('<option value="'+item.id+'" selected>'+item.name+'</option>')
-    }else if(item.busiId === canshu.busiId){
-      $('#bpq #_wangyuanId').append('<option value="'+item.id+'" >'+item.name+'</option>')
-    }
-  })
-  $('#bpq #bpqVendor').html('<input id="_vendor" class="form-control input-sm" style="width: 200px;" placeholder="如：e164AF" value="'+canshu.vendor+'">')
-  $('#bpq #bpqVersion').html('<input id="_version" class="form-control input-sm" style="width: 200px;" placeholder="如：e164AF" value="'+canshu.version+'">')
-  $('#bpq #bpqRule').html('<input id="_rule" class="form-control input-sm" style="width: 200px;" placeholder="如：e164AF" value="'+canshu.rule+'">')
+function zhilingInit(){
+  bpq.style.display='block';bpq2.style.display='none';glcs.style.display='block';ycs.style.display='none'
 }
 
 function modify(){
@@ -174,28 +157,10 @@ function initNew(){
   })
 }
 
-function reload(){
-  ajaxData(apiConfig['canshu'].url, {}, function(res){
-    apiConfig['canshu'].callback(res)
-  }, function(){
-    console.log('canshu: ajax请求失败');
-  })
-}
-
 function reset(){
   var id = $('#canshuId').data("id")
   canshuInit(id)
-  resetNew()
-}
 
-function resetNew(){
-  $('#_new_name').val('')
-  $('#_new_busi').val('all')
-  $('#_new_wangyuan').html('<option value="all">全部网元</option>\n')
-  $('#_new_wangyuan').val('all')
-  $('#_new_vendor').val('')
-  $('#_new_version').val('')
-  $('#_new_rule').val('')
 }
 
 function ajaxData(url, params, callback, failCallback) {
@@ -234,4 +199,10 @@ ajaxData(apiConfig['canshu'].url, {}, function(res){
   apiConfig['canshu'].callback(res)
 }, function(){
   console.log('canshu: ajax请求失败');
+})
+
+ajaxData(apiConfig['zhiling'].url, {}, function(res){
+  apiConfig['zhiling'].callback(res)
+}, function(){
+  console.log('zhiling: ajax请求失败');
 })
