@@ -7,7 +7,7 @@ var apiConfig = {
       window.canshu = res.data
       $(".canshu").html('')
       $.each(res.data.canshuList, function(index, item) {
-        $(".canshu").append("<span data-id='"+item.id+"' onclick=\"todo1()\">$(" + item.name + ")</span>\n")
+        $(".canshu").append("<button style='background: rgba(0,0,0,0);border:0'><span data-id='"+item.id+"' onclick=\"clickCanshu()\">$(" + item.name + ")</span></button>\n")
       })
       $(".busi").html('<option value="all">全部业务</option>\n')
       $.each(res.data.busiList, function(index, item) {
@@ -56,7 +56,49 @@ var apiConfig = {
     }
   }
 }
+function clickCanshu(){
+  var content = event.target.innerHTML
+  var sel = window.getSelection();
+  console.log('sel :>> ', sel);
+  function getClassName(el){
+    if(el.nodeName === 'DIV') {
+      return el.className
+    }else{
+      return getClassName(el.parentElement)
+    }
+  }
 
+  if(sel.anchorNode && getClassName(sel.anchorNode) === 'leave-message-textarea'){
+    insertContent(content)
+  }
+}
+function insertContent(content){
+  if (!content) {//如果插入的内容为空则返回
+      return
+  }
+  var sel = null;
+  if (document.selection) {//IE9以下
+      sel = document.selection;
+      sel.createRange().pasteHTML(content);
+  } else {
+      sel = window.getSelection();
+      if (sel.rangeCount > 0) {
+          var range = sel.getRangeAt(0);      //获取选择范围
+          range.deleteContents();             //删除选中的内容
+          var el = document.createElement("div"); //创建一个空的div外壳
+          el.innerHTML = content;                 //设置div内容为我们想要插入的内容。
+          var frag = document.createDocumentFragment();//创建一个空白的文档片段，便于之后插入dom树
+          var node = el.firstChild;
+          var lastNode = frag.appendChild(node);
+          range.insertNode(frag);                 //设置选择范围的内容为插入的内容
+          var contentRange = range.cloneRange();  //克隆选区
+          contentRange.setStartAfter(lastNode);          //设置光标位置为插入内容的末尾
+          contentRange.collapse(true);                   //移动光标位置到末尾
+          sel.removeAllRanges();                  //移出所有选区
+          sel.addRange(contentRange);             //添加修改后的选区
+      }
+  }
+}
 function changeBusi(busiClassName, wangyuanClassName) {
   var busi = $("."+busiClassName).val()
   $("."+wangyuanClassName).html('<option value="all">全部网元</option>\n')
