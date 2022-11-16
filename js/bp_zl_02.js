@@ -18,6 +18,16 @@ var apiConfig = {
       $.each(res.data.wangyuanList, function(index, item) {
         // $(".wangyuan").append("<option value="+item.id+">" + item.name + "</option>\n")
       })
+
+      $(".busi2").html('<option value="all">全部业务</option>\n')
+      $.each(res.data.busiList, function(index, item) {
+        $(".busi2").append("<option value="+item.id+">" + item.name + "</option>\n")
+      })
+      
+      $(".wangyuan2").html('<option value="all">全部网元</option>\n')
+      $.each(res.data.wangyuanList, function(index, item) {
+        // $(".wangyuan").append("<option value="+item.id+">" + item.name + "</option>\n")
+      })
     }
   },
   'zhiling': {
@@ -103,7 +113,7 @@ function changeBusi(busiClassName, wangyuanClassName) {
   var busi = $("."+busiClassName).val()
   $("."+wangyuanClassName).html('<option value="all">全部网元</option>\n')
   if(busi === 'all') {
-    if(busiClassName === 'busi'){
+    if(busiClassName === 'busi2'){
       filterCanshu(window.canshu.canshuList)
     }
   }else{
@@ -113,18 +123,18 @@ function changeBusi(busiClassName, wangyuanClassName) {
     $.each(wangyuanList, function(index, item) {
       $("."+wangyuanClassName).append("<option value="+item.id+">" + item.name + "</option>\n")
     })
-    if(busiClassName === 'busi'){
+    if(busiClassName === 'busi2'){
       var canshuList = window.canshu.canshuList.filter(function(item){
         return item.busiId == busi
       })
-      if(busiClassName === 'busi') filterCanshu(canshuList)
+      if(busiClassName === 'busi2') filterCanshu(canshuList)
     }
   }
 }
 function changeWangyuan(busiClassName, wangyuanClassName) {
   var busi = $("."+busiClassName).val()
   var wangyuan = $("."+wangyuanClassName).val()
-  if(busiClassName === 'busi') {
+  if(busiClassName === 'busi2') {
     var canshuList = window.canshu.canshuList.filter(function(item){
       if(wangyuan === 'all'){
         return item.busiId == busi
@@ -135,10 +145,11 @@ function changeWangyuan(busiClassName, wangyuanClassName) {
     filterCanshu(canshuList)
   }
 }
-function filterCanshu(canshuList) { 
-  $(".bp_zl_cs").html('')
+function filterCanshu(canshuList) {
+  console.log(123);
+  $(".bp_zl_cs.canshu").html('')
   $.each(canshuList, function(index, item) {
-    $(".bp_zl_cs").append("<span data-id='"+item.id+"' onclick=\"canshuInit()\">$(" + item.name + ")</span>\n")
+    $(".bp_zl_cs.canshu").append("<span data-id='"+item.id+"' onclick=\"canshuInit()\">$(" + item.name + ")</span>\n")
   })
 }
 

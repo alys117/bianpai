@@ -70,14 +70,14 @@
 							<form class="form-horizontal" id="ycs">
 								<div class="form-group">
 									<div class="col-sm-6">
-										<select class="form-control input-sm busi">
+										<select class="form-control input-sm busi2"  onchange="changeBusi('busi2','wangyuan2')">
 											<option>全部业务</option>
 											<option>...</option>
 											<option>...</option>
 										</select>
 									</div>
 									<div class="col-sm-6">
-										<select class="form-control input-sm wangyuan">
+										<select class="form-control input-sm wangyuan2" onchange="changeWangyuan('busi2','wangyuan2')">
 											<option>全部网元</option>
 											<option>...</option>
 											<option>...</option>
@@ -85,7 +85,7 @@
 									</div>
 								</div>
 							</form>
-							<form class="form-horizontal" id="glcs" style="display: none;">
+							<!-- <form class="form-horizontal" id="glcs" style="display: none;">
 								<div class="form-group">
 									<div class="col-sm-6">
 										<select class="form-control input-sm">
@@ -102,7 +102,7 @@
 										</select>
 									</div>
 								</div>
-							</form>
+							</form> -->
 							<div class="bp_zl_cs canshu">
 								<span>$(e164AF)</span>
 								<span>$(CSA)</span>
