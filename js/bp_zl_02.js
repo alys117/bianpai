@@ -115,6 +115,8 @@ function changeBusi(busiClassName, wangyuanClassName) {
   if(busi === 'all') {
     if(busiClassName === 'busi2'){
       filterCanshu(window.canshu.canshuList)
+    }else if(busiClassName === 'busi'){
+      filterZhiling(window.canshu.zhilingList)
     }
   }else{
     var wangyuanList = window.canshu.wangyuanList.filter(function(item){
@@ -128,6 +130,11 @@ function changeBusi(busiClassName, wangyuanClassName) {
         return item.busiId == busi
       })
       if(busiClassName === 'busi2') filterCanshu(canshuList)
+    }else if(busiClassName === 'busi'){
+      var zhilingList = window.zhiling.zhilingList.filter(function(item){
+        return item.busiId == busi
+      })
+      if(busiClassName === 'busi') filterZhiling(zhilingList)
     }
   }
 }
@@ -143,18 +150,65 @@ function changeWangyuan(busiClassName, wangyuanClassName) {
       }
     })
     filterCanshu(canshuList)
+  }else if(busiClassName === 'busi'){
+    var zhilingList = window.zhiling.zhilingList.filter(function(item){
+      if(wangyuan === 'all'){
+        return item.busiId == busi
+      }else{
+        return item.busiId == busi && item.wangyuanId == wangyuan
+      }
+    })
+    filterZhiling(zhilingList)
   }
 }
 function filterCanshu(canshuList) {
-  console.log(123);
   $(".bp_zl_cs.canshu").html('')
   $.each(canshuList, function(index, item) {
     $(".bp_zl_cs.canshu").append("<span data-id='"+item.id+"' onclick=\"canshuInit()\">$(" + item.name + ")</span>\n")
   })
 }
 
+function filterZhiling(zhilingList) {
+  $(".bp_zl_cs.zhiling").html('')
+  $.each(zhilingList, function(index, item) {
+    $(".bp_zl_cs.zhiling").append("<span data-id='"+item.id+"' onclick=\"zhilingInit()\">$(" + item.name + ")</span>\n")
+  })
+}
+
 function zhilingInit(){
-  bpq.style.display='block';bpq2.style.display='none';glcs.style.display='block';ycs.style.display='none'
+  var id = event.target.dataset.id
+  bpq.style.display='block';
+  bpq2.style.display='none';
+  // glcs.style.display='block';
+  ycs.style.display='none'
+
+  var zhiling = window.zhiling.zhilingList.find(item=>item.id == id)
+  console.log('zhiling :>> ', zhiling);
+  // select 被选中的操作代码
+  $('#commandType').find('option[value='+zhiling.commandType+']').attr('selected',true)
+
+  zhiling.fail.forEach((element, idx)=> {
+    if(idx === 0){
+      var a = $('#commandExecFailIdTD').children().find('input').val(element)
+    }else{
+      addrow('commandExecFailId', element)
+    }
+  });
+  zhiling.success.forEach((element, idx)=> {
+    if(idx === 0){
+      var a = $('#commandExecSuccessIdTD').children().find('input').val(element)
+    }else{
+      addrow('commandExecSuccessId', element)
+    }
+  });
+  zhiling.reply.forEach((element, idx)=> {
+    if(idx === 0){
+      var a = $('#replyIdTD').children().find('input').val(element)
+    }else{
+      addrow('replyId', element)
+    }
+  });
+  
 }
 
 function modify(){
@@ -247,6 +301,17 @@ function postData(url, data, callback, failCallback) {
         failCallback()
     }
   })
+}
+
+function addrow(id, value){
+  var divid = id+'_'+ new Date().getTime()
+  $('#'+id+'TD').append(
+  '<div id="'+divid+'" class="input-group" style="width: 200px;margin-top: 10px;">'+
+  '<input type="text" class="form-control input-sm" value="'+(value?value:'')+'">'+
+  '<div class="input-group-addon pointer" onclick="delrow(\''+divid+'\')"><span class="fa fa-minus"></span></div>')
+}
+function delrow(id){
+  $('#'+id).remove()
 }
 ajaxData(apiConfig['canshu'].url, {}, function(res){
   apiConfig['canshu'].callback(res)

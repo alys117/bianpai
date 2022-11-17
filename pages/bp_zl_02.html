@@ -38,14 +38,14 @@
 							<form class="form-horizontal">
 								<div class="form-group">
 									<div class="col-sm-6">
-										<select class="form-control input-sm busi">
+										<select class="form-control input-sm busi" onchange="changeBusi('busi','wangyuan')">
 											<option>全部业务</option>
 											<option>...</option>
 											<option>...</option>
 										</select>
 									</div>
 									<div class="col-sm-6">
-										<select class="form-control input-sm wangyuan">
+										<select class="form-control input-sm wangyuan" onchange="changeWangyuan('busi','wangyuan')">
 											<option>全部网元</option>
 											<option>...</option>
 											<option>...</option>
@@ -146,9 +146,9 @@
 									</tr>
 									<tr>
 										<th>指令类型<span class="text-danger">*</span></th>
-										<td><select class="form-control input-sm" style="width: 200px;">
-												<option>新增</option>
-												<option>修改</option>
+										<td><select id="commandType" class="form-control input-sm" style="width: 200px;">
+												<option value="add">新增</option>
+												<option value="modify">修改</option>
 												<option>删除</option>
 												<option>采集</option>
 												<option>回滚</option>
@@ -179,31 +179,31 @@
 										<td><input type="text" class="form-control input-sm" style="width: 200px;"></td>
 									</tr>
 									<tr>
-										<th>命令执行成功标识符</th>
-										<td>
+										<th id="commandExecSuccessId">命令执行成功标识符</th>
+										<td id="commandExecSuccessIdTD">
 											<div class="input-group" style="width: 200px;">
 												<input type="text" class="form-control input-sm">
-												<div class="input-group-addon pointer"><span class="fa fa-plus"></span>
+												<div class="input-group-addon pointer" onclick="addrow('commandExecSuccessId')"><span class="fa fa-plus"></span>
 												</div>
 											</div>
 										</td>
 									</tr>
 									<tr>
-										<th>命令执行失败标识符</th>
-										<td>
+										<th id="commandExecFailId">命令执行失败标识符</th>
+										<td id="commandExecFailIdTD">
 											<div class="input-group" style="width: 200px;">
 												<input type="text" class="form-control input-sm">
-												<div class="input-group-addon pointer"><span class="fa fa-plus"></span>
+												<div class="input-group-addon pointer" onclick="addrow('commandExecFailId')"><span class="fa fa-plus"></span>
 												</div>
 											</div>
 										</td>
 									</tr>
 									<tr>
-										<th>应答标识符</th>
-										<td>
+										<th id="replyId" rowspan="1">应答标识符</th>
+										<td id="replyIdTD">
 											<div class="input-group" style="width: 200px;">
 												<input type="text" class="form-control input-sm">
-												<div class="input-group-addon pointer"><span class="fa fa-plus"></span>
+												<div class="input-group-addon pointer" onclick="addrow('replyId')"><span class="fa fa-plus"></span>
 												</div>
 											</div>
 										</td>
