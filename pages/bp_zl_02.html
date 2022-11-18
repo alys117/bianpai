@@ -64,7 +64,7 @@
 					</div>
 					<div class="panel panel-default" style="min-height:250px;">
 						<div class="panel-heading"><h4 class="panel-title">
-									参数库<span class="fa fa-refresh pull-right pointer"></span>
+									参数库<span class="fa fa-refresh pull-right pointer" onclick="reload('canshu')"></span>
 								</h4></div>
 						<div class="panel-body">
 							<form class="form-horizontal" id="ycs">
@@ -303,31 +303,31 @@
 										<td><input type="text" class="form-control input-sm" style="width: 200px;"></td>
 									</tr>
 									<tr>
-										<th>命令执行成功标识符</th>
-										<td>
+                    <th id="newCommandExecSuccessId">命令执行成功标识符</th>
+										<td id="newCommandExecSuccessIdTD">
 											<div class="input-group" style="width: 200px;">
 												<input type="text" class="form-control input-sm">
-												<div class="input-group-addon pointer"><span class="fa fa-plus"></span>
+												<div class="input-group-addon pointer" onclick="addrow('newCommandExecSuccessId')"><span class="fa fa-plus"></span>
 												</div>
 											</div>
 										</td>
 									</tr>
 									<tr>
-										<th>命令执行失败标识符</th>
-										<td>
+										<th id="newCommandExecFailId">命令执行失败标识符</th>
+										<td id="newCommandExecFailIdTD">
 											<div class="input-group" style="width: 200px;">
 												<input type="text" class="form-control input-sm">
-												<div class="input-group-addon pointer"><span class="fa fa-plus"></span>
+												<div class="input-group-addon pointer" onclick="addrow('newCommandExecFailId')"><span class="fa fa-plus"></span>
 												</div>
 											</div>
 										</td>
 									</tr>
 									<tr>
-										<th>应答标识符</th>
-										<td>
+										<th id="newReplyId">应答标识符</th>
+										<td id="newReplyIdTD">
 											<div class="input-group" style="width: 200px;">
 												<input type="text" class="form-control input-sm">
-												<div class="input-group-addon pointer"><span class="fa fa-plus"></span>
+												<div class="input-group-addon pointer" onclick="addrow('newReplyId')"><span class="fa fa-plus"></span>
 												</div>
 											</div>
 										</td>
