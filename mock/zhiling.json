@@ -7,7 +7,7 @@
         "name":"CMN_新增", 
         "busiId":"busi1",
         "wangyuanId":"wangyuan1",
-        "command": "ADD CNACLD: P=0, pfx=K'$(2),CSA=$(CSA), RSC=$(RSC), MINL=$(MINL), MAXL=$(MAXL), DEST=$(DEST), ICLDTYPE=$(ICLDTYPE),sDescription=\"$(sDescription)\";",
+        "command": "ADD1 CNACLD: P=0, pfx=K'$(2),CSA=$(CSA), RSC=$(RSC), MINL=$(MINL), MAXL=$(MAXL), DEST=$(DEST), ICLDTYPE=$(ICLDTYPE),sDescription=\"$(sDescription)\";",
         "vendor":"华为",
         "commandType":"add",
         "jk": "是",
@@ -21,7 +21,7 @@
         "readtimeoutt":12,
         "waitimeout":30
       },
-      {"id":"zhiling2","name":"CMN_修改", "busiId":"busi1","wangyuanId":"wangyuan1","command": "ADD CNACLD: P=0, pfx=K'$(2),CSA=$(CSA), RSC=$(RSC), MINL=$(MINL), MAXL=$(MAXL), DEST=$(DEST), ICLDTYPE=$(ICLDTYPE),sDescription=\"$(sDescription)\";",
+      {"id":"zhiling2","name":"CMN_修改", "busiId":"busi1","wangyuanId":"wangyuan1","command": "ADD2 CNACLD: P=0, pfx=K'$(2),CSA=$(CSA), RSC=$(RSC), MINL=$(MINL), MAXL=$(MAXL), DEST=$(DEST), ICLDTYPE=$(ICLDTYPE),sDescription=\"$(sDescription)\";",
       "vendor":"华为",
       "commandType":"modify",
       "jk": "是",

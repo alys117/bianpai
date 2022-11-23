@@ -313,53 +313,11 @@ function delZhiling(el){
   }
 }
 
-/* 拖拽 */
-//左侧
-var g1 = document.getElementById('g1');
-var ops1 = {
-  animation: 100,
-  draggable: ".item",
-  group: { name: "zhiling", pull: 'clone', put: false },
-  sort: false, // 是否排序
-
-  //拖动结束
-  onEnd: function (evt) {
-    console.log('g1 onEnd', evt);
-    //获取拖动后的排序
-    var arr = sortable1.toArray();
-    // console.log(arr);
-  },
-};
-var sortable1 = Sortable.create(g1, ops1);
-
-
-var g2 = document.getElementById('g2');
-var ops2 = {
-  animation: 100,
-  draggable: ".item",
-  group: { name: "zhiling", pull: true, put: true },
-  onAdd(evt) {
-    console.log('g2 onAdd', evt);
-    console.log($('#g2').children()); 
-    if($('#g2').children().length>0){
-      $('#tip').css('display','none')
-    }
-    evt.item.style.display = 'block'
-    var zhiling = window.zhiling.zhilingList.find(it=>it.id==evt.item.dataset.id)
-    evt.item.innerHTML = '<span class="fa fa-trash-o sc_dw" onclick="delZhiling(this)"></span><pre>'+zhiling.command+'</pre>'
-    var arr = sortable2.toArray();
-    console.log(arr);
-  },
-  //拖动结束
-  onEnd: function (evt) {
-    console.log('g2 onEnd', evt);
-    //获取拖动后的排序
-    var arr = sortable2.toArray();
-    console.log(arr);
-  },
-};
-var sortable2 = Sortable.create(g2, ops2);
-/* 拖拽 */
+function createCompose(){
+  console.log($("#organId1").val());
+  
+  fzcj.style.display='table'
+}
 
 ajaxData(apiConfig['wangyuan'].url, {}, function(res){
   apiConfig['wangyuan'].callback(res)
@@ -370,9 +328,4 @@ ajaxData(apiConfig['zhiling'].url, {}, function(res){
   apiConfig['zhiling'].callback(res)
 }, function(){
   console.log('zhiling: ajax请求失败');
-})
-ajaxData(apiConfig['template'].url, {}, function(res){
-  apiConfig['template'].callback(res)
-}, function(){
-  console.log('template: ajax请求失败');
 })

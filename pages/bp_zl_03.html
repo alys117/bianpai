@@ -30,7 +30,7 @@
 				<div class="col-sm-3" style="padding-right:3px;">
 					<div class="panel panel-default" style="min-height: 250px; margin-bottom: 3px;">
 						<div class="panel-heading"><h4 class="panel-title">
-									指令库<span class="fa fa-refresh pull-right pointer"></span>
+									指令库<span class="fa fa-refresh pull-right pointer"></span><span onclick="canshuInit()" style="float: right;font-weight: 200;">新增</span>
 								</h4></div>
 						<div class="panel-body">
 							<form class="form-horizontal" id="ycs">
@@ -100,11 +100,12 @@
 									编排区<span class="fa fa-refresh pull-right pointer"></span>
 								</h4></div>
 						<div class="panel-body" id="bpq" style="display: none;">
+              <div id="tip">请拖入指令</div>
               <div id="g2">
-                <div id="item">
+                <!-- <div class="item">
                   <span class="fa fa-trash-o sc_dw"></span>
                   <pre>ADD CNACLD: P=0, pfx=K'$(e164AF), CSA=$(CSA), RSC=$(RSC), MINL=$(MINL), MAXL=$(MAXL), DEST=$(DEST), ICLDTYPE=$(ICLDTYPE), sDescription="$(sDescription)";</pre>
-                </div>
+                </div> -->
               </div>
 							<br>
 							<table class="table table-bordered">
