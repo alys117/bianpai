@@ -1,34 +1,191 @@
 {
   "code": 200,
   "data": {
-    "busiList":[
-      {"id":"busi1","name":"业务1"},
-      {"id":"busi2","name":"业务2"},
-      {"id":"busi3","name":"业务3"}
+    "serviceList": [
+      { "serviceCode": "busi1", "serviceName": "业务1", "netElementList": [
+        { "netElementCode": "ne1", "netElementName": "网元1", "supplierList": [{"supplierCode":"vendor1","supplierName":"供应商1"}, {"supplierCode":"vendor2","supplierName":"供应商2"}] },
+        { "netElementCode": "ne2", "netElementName": "网元2", "supplierList": [{"supplierCode":"vendor3","supplierName":"供应商3"}, {"supplierCode":"vendor4","supplierName":"供应商4"}] }
+      ] },
+      { "serviceCode": "busi2", "serviceName": "业务2", "netElementList": [
+        { "netElementCode": "ne3", "netElementName": "网元3", "supplierList": [{"supplierCode":"vendor5","supplierName":"供应商5"}, {"supplierCode":"vendor6","supplierName":"供应商6"}] },
+        { "netElementCode": "ne4", "netElementName": "网元4", "supplierList": [{"supplierCode":"vendor7","supplierName":"供应商7"}, {"supplierCode":"vendor8","supplierName":"供应商8"}] }
+      ] },
+      { "serviceCode": "busi3", "serviceName": "业务3", "netElementList": [
+        { "netElementCode": "ne5", "netElementName": "网元5", "supplierList": [{"supplierCode":"vendor9","supplierName":"供应商9"}, {"supplierCode":"vendor10","supplierName":"供应商10"}] },
+        { "netElementCode": "ne6", "netElementName": "网元6", "supplierList": [{"supplierCode":"vendor11","supplierName":"供应商11"}, {"supplierCode":"vendor12","supplierName":"供应商12"}] }
+      ] }
     ],
-    "wangyuanList":[
-      {"id":"wangyuan1","name":"网元1", "busiId":"busi1"},
-      {"id":"wangyuan2","name":"网元2", "busiId":"busi1"},
-      {"id":"wangyuan3","name":"网元3", "busiId":"busi2"},
-      {"id":"wangyuan4","name":"网元4", "busiId":"busi2"},
-      {"id":"wangyuan5","name":"网元5", "busiId":"busi3"},
-      {"id":"wangyuan6","name":"网元6", "busiId":"busi3"}
+    "netElementList": [
+      {
+        "netElementCode": "wangyuan1",
+        "netElementName": "网元1",
+        "serviceCode": "busi1"
+      },
+      {
+        "netElementCode": "wangyuan2",
+        "netElementName": "网元2",
+        "serviceCode": "busi1"
+      },
+      {
+        "netElementCode": "wangyuan3",
+        "netElementName": "网元3",
+        "serviceCode": "busi2"
+      },
+      {
+        "netElementCode": "wangyuan4",
+        "netElementName": "网元4",
+        "serviceCode": "busi2"
+      },
+      {
+        "netElementCode": "wangyuan5",
+        "netElementName": "网元5",
+        "serviceCode": "busi3"
+      },
+      {
+        "netElementCode": "wangyuan6",
+        "netElementName": "网元6",
+        "serviceCode": "busi3"
+      }
     ],
-    "canshuList": [
-      {"id":"a1","name":"e164AF", "busiId":"busi1", "wangyuanId":"wangyuan1","vendor":"华为","version":"v123","rule":"my rule1"},
-      {"id":"a2","name":"CSA", "busiId":"busi1", "wangyuanId":"wangyuan1","vendor":"华为","version":"v123","rule":"my rule2"},
-      {"id":"a3","name":"e166AF", "busiId":"busi2", "wangyuanId":"wangyuan3","vendor":"华为","version":"v123","rule":"my rule3"},
-      {"id":"a4","name":"CSAE", "busiId":"busi2", "wangyuanId":"wangyuan4","vendor":"华为","version":"v123","rule":"my rule4"},
-      {"id":"a5","name":"RSC", "busiId":"busi3", "wangyuanId":"wangyuan5","vendor":"华为","version":"v123","rule":"my rule5"},
-      {"id":"a6","name":"MINL", "busiId":"busi1", "wangyuanId":"wangyuan2","vendor":"华为","version":"v123","rule":"my rule6"},
-      {"id":"a7","name":"MAXL", "busiId":"busi2", "wangyuanId":"wangyuan4","vendor":"华为","version":"v123","rule":"my rule7"},
-      {"id":"a8","name":"DEST", "busiId":"busi2", "wangyuanId":"wangyuan1","vendor":"华为","version":"v123","rule":"my rule8"},
-      {"id":"a9","name":"ICLDTYPE", "busiId":"busi1", "wangyuanId":"wangyuan1","vendor":"华为","version":"v123","rule":"my rule9"},
-      {"id":"a10","name":"sDescription", "busiId":"busi1", "wangyuanId":"wangyuan1","vendor":"华为","version":"v123","rule":"my rule10"},
-      {"id":"a11","name":"test11", "busiId":"busi1", "wangyuanId":"wangyuan1","vendor":"华为","version":"v123","rule":"my rule11"},
-      {"id":"a12","name":"test12", "busiId":"busi1", "wangyuanId":"wangyuan1","vendor":"华为","version":"v123","rule":"my rule12"},
-      {"id":"a13","name":"test13", "busiId":"busi1", "wangyuanId":"wangyuan1","vendor":"华为","version":"v123","rule":"my rule13"},
-      {"id":"a14","name":"test14", "busiId":"busi1", "wangyuanId":"wangyuan1","vendor":"华为","version":"v123","rule":"my rule14"},
-      {"id":"a15","name":"test15", "busiId":"busi1", "wangyuanId":"wangyuan1","vendor":"华为","version":"v123","rule":"my rule15"}
-  ]}
+    "ruleList": [
+      {
+        "ruleName": "规则1",
+        "ruleId": "rule1"
+      }
+    ],
+    "paramList": [
+      {
+        "paramName": "e164AF",
+        "serviceName": "业务1",
+        "netElementName": "网元1",
+        "supplierName": "供应商1",
+        "serviceCode": "busi1",
+        "netElementCode": "ne1",
+        "supplierCode": "vendor1",
+        "paramVersion": "v1.0",
+        "ruleId": "rule1",
+        "ruleName": "规则1",
+        "paramId": "a1"
+      },
+      {
+        "paramName": "CSA",
+        "serviceName": "业务2",
+        "netElementName": "网元3",
+        "serviceCode": "busi2",
+        "netElementCode": "ne3",
+        "supplierCode": "vendor6",
+        "supplierName": "供应商6",
+        "paramVersion": "v1.0",
+        "ruleId": "rule1",
+        "ruleName": "规则1",
+        "paramId": "a2"
+      },
+      {
+        "paramName": "e166AF",
+        "serviceName": "业务2",
+        "serviceCode": "busi2",
+        "netElementCode": "ne3",
+        "netElementName": "网元3",
+        "paramVersion": "v1.0",
+        "supplierCode": "vendor5",
+        "supplierName": "供应商5",
+        "ruleId": "rule1",
+        "ruleName": "规则1",
+        "paramId": "a3"
+      },
+      {
+        "paramName": "CSAE",
+        "serviceName": "业务2",
+        "serviceCode": "busi2",
+        "netElementCode": "ne4",
+        "netElementName": "网元4",
+        "paramVersion": "v1.0",
+        "supplierCode": "vendor1",
+        "supplierName": "供应商1",
+        "ruleId": "rule1",
+        "ruleName": "规则1",
+        "paramId": "a4"
+      },
+      {
+        "paramName": "RSC",
+        "serviceName": "业务2",
+        "serviceCode": "busi2",
+        "netElementCode": "ne4",
+        "netElementName": "网元4",
+        "paramVersion": "v1.0",
+        "supplierCode": "vendor1",
+        "supplierName": "供应商1",
+        "ruleId": "rule1",
+        "ruleName": "规则1",
+        "paramId": "a5"
+      },
+      {
+        "paramName": "MINL",
+        "serviceName": "业务2",
+        "serviceCode": "busi2",
+        "netElementCode": "ne4",
+        "netElementName": "网元4",
+        "paramVersion": "v1.0",
+        "supplierCode": "vendor1",
+        "supplierName": "供应商1",
+        "ruleId": "rule1",
+        "ruleName": "规则1",
+        "paramId": "a6"
+      },
+      {
+        "paramName": "MAXL",
+        "serviceName": "业务2",
+        "serviceCode": "busi2",
+        "netElementCode": "ne4",
+        "netElementName": "网元4",
+        "paramVersion": "v1.0",
+        "supplierCode": "vendor1",
+        "supplierName": "供应商1",
+        "ruleId": "rule1",
+        "ruleName": "规则1",
+        "paramId": "a7"
+      },
+      {
+        "paramName": "DEST",
+        "serviceName": "业务2",
+        "serviceCode": "busi2",
+        "netElementCode": "ne4",
+        "netElementName": "网元4",
+        "paramVersion": "v1.0",
+        "supplierCode": "vendor1",
+        "supplierName": "供应商1",
+        "ruleId": "rule1",
+        "ruleName": "规则1",
+        "paramId": "a8"
+      },
+      {
+        "paramName": "ICLDTYPE",
+        "serviceName": "业务2",
+        "serviceCode": "busi2",
+        "netElementCode": "ne4",
+        "netElementName": "网元4",
+        "paramVersion": "v1.0",
+        "supplierCode": "vendor1",
+        "supplierName": "供应商1",
+        "ruleId": "rule1",
+        "ruleName": "规则1",
+        "paramId": "a9"
+      },
+      {
+        "paramName": "sDescription",
+        "serviceName": "业务2",
+        "serviceCode": "busi2",
+        "netElementCode": "ne4",
+        "netElementName": "网元4",
+        "paramVersion": "v1.0",
+        "supplierCode": "vendor1",
+        "supplierName": "供应商1",
+        "ruleId": "rule1",
+        "ruleName": "规则1",
+        "paramId": "a10"
+      }
+    ]
+  },
+  "message": "success",
+  "success": true
 }
