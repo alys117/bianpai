@@ -1,31 +1,51 @@
 var apiConfig = {
   'mock': true,
   'canshu': {
-    url: "../mock/xxx.json",
+    url: "../mock/yyy.json",
     callback: function(res) {
       console.log(res)
       window.canshu = res.data
+      window.zhiling = {}
+      window.zhiling.commandList = res.data.commandList
+      window.canshu.netElementList = []
+      window.canshu.supplierList = []
+      window.canshu.serviceList.forEach(function(item){
+        item.netElementList.forEach(function(item2){
+          item2.serviceCode = item.serviceCode
+          item2.supplierList.forEach(function(item3){
+            item3.netElementCode = item2.netElementCode
+            item3.serviceCode = item.serviceCode
+          })
+          window.canshu.supplierList.push(...item2.supplierList)
+        })
+        window.canshu.netElementList.push(...item.netElementList)
+      })
+      $(".zhiling").html('')
+      $.each(res.data.commandList, function(index, item) {
+        $(".zhiling").append("<span data-id='"+item.commandId+"' onclick=\"zhilingInit()\">$(" + item.commandName + ")</span>\n")
+      })
+
       $(".canshu").html('')
-      $.each(res.data.canshuList, function(index, item) {
-        $(".canshu").append("<button style='background: rgba(0,0,0,0);border:0'><span data-id='"+item.id+"' onclick=\"clickCanshu()\">$(" + item.name + ")</span></button>\n")
+      $.each(res.data.paramList, function(index, item) {
+        $(".canshu").append("<button style='background: rgba(0,0,0,0);border:0'><span data-id='"+item.paramId+"' onclick=\"clickCanshu()\">$(" + item.paramName + ")</span></button>\n")
       })
       $(".busi").html('<option value="all">全部业务</option>\n')
-      $.each(res.data.busiList, function(index, item) {
-        $(".busi").append("<option value="+item.id+">" + item.name + "</option>\n")
+      $.each(res.data.serviceList, function(index, item) {
+        $(".busi").append("<option value="+item.serviceCode+">" + item.serviceName + "</option>\n")
       })
       
       $(".wangyuan").html('<option value="all">全部网元</option>\n')
-      $.each(res.data.wangyuanList, function(index, item) {
+      $.each(res.data.netElementList, function(index, item) {
         // $(".wangyuan").append("<option value="+item.id+">" + item.name + "</option>\n")
       })
 
       $(".busi2").html('<option value="all">全部业务</option>\n')
-      $.each(res.data.busiList, function(index, item) {
-        $(".busi2").append("<option value="+item.id+">" + item.name + "</option>\n")
+      $.each(res.data.serviceList, function(index, item) {
+        $(".busi2").append("<option value="+item.serviceCode+">" + item.serviceName + "</option>\n")
       })
       
       $(".wangyuan2").html('<option value="all">全部网元</option>\n')
-      $.each(res.data.wangyuanList, function(index, item) {
+      $.each(res.data.netElementList, function(index, item) {
         // $(".wangyuan").append("<option value="+item.id+">" + item.name + "</option>\n")
       })
     }
@@ -113,20 +133,20 @@ function changeBusi(busiClassName, wangyuanClassName) {
   $("."+wangyuanClassName).html('<option value="all">全部网元</option>\n')
   if(busi === 'all') {
     if(busiClassName === 'busi2'){
-      filterCanshu(window.canshu.canshuList)
+      filterCanshu(window.canshu.paramList)
     }else if(busiClassName === 'busi'){
       filterZhiling(window.zhiling.zhilingList)
     }
   }else{
-    var wangyuanList = window.canshu.wangyuanList.filter(function(item){
-      return item.busiId == busi
+    var wangyuanList = window.canshu.netElementList.filter(function(item){
+      return item.serviceCode == busi
     })
     $.each(wangyuanList, function(index, item) {
-      $("."+wangyuanClassName).append("<option value="+item.id+">" + item.name + "</option>\n")
+      $("."+wangyuanClassName).append("<option value="+item.netElementCode+">" + item.netElementName + "</option>\n")
     })
     if(busiClassName === 'busi2'){
-      var canshuList = window.canshu.canshuList.filter(function(item){
-        return item.busiId == busi
+      var canshuList = window.canshu.paramList.filter(function(item){
+        return item.serviceCode == busi
       })
       if(busiClassName === 'busi2') filterCanshu(canshuList)
     }else if(busiClassName === 'busi'){
@@ -141,20 +161,20 @@ function changeWangyuan(busiClassName, wangyuanClassName) {
   var busi = $("."+busiClassName).val()
   var wangyuan = $("."+wangyuanClassName).val()
   if(busiClassName === 'busi2') {
-    var canshuList = window.canshu.canshuList.filter(function(item){
+    var canshuList = window.canshu.paramList.filter(function(item){
       if(wangyuan === 'all'){
-        return item.busiId == busi
+        return item.serviceCode == busi
       }else{
-        return item.busiId == busi && item.wangyuanId == wangyuan
+        return item.serviceCode == busi && item.netElementCode == wangyuan
       }
     })
     filterCanshu(canshuList)
   }else if(busiClassName === 'busi'){
     var zhilingList = window.zhiling.zhilingList.filter(function(item){
       if(wangyuan === 'all'){
-        return item.busiId == busi
+        return item.serviceCode == busi
       }else{
-        return item.busiId == busi && item.wangyuanId == wangyuan
+        return item.serviceCode == busi && item.netElementCode == wangyuan
       }
     })
     filterZhiling(zhilingList)
@@ -163,7 +183,7 @@ function changeWangyuan(busiClassName, wangyuanClassName) {
 function filterCanshu(canshuList) {
   $(".bp_zl_cs.canshu").html('')
   $.each(canshuList, function(index, item) {
-    $(".bp_zl_cs.canshu").append("<span data-id='"+item.id+"' onclick=\"canshuInit()\">$(" + item.name + ")</span>\n")
+    $(".bp_zl_cs.canshu").append("<span data-id='"+item.paramId+"' onclick=\"canshuInit()\">$(" + item.paramName + ")</span>\n")
   })
 }
 
@@ -181,26 +201,26 @@ function zhilingInit(){
   // glcs.style.display='block';
   ycs.style.display='none'
 
-  var zhiling = window.zhiling.zhilingList.find(item=>item.id == id)
+  var zhiling = window.zhiling.commandList.find(item=>item.commandId == id)
   console.log('zhiling :>> ', zhiling);
   // select 被选中的操作代码
   $('#commandType').find('option[value='+zhiling.commandType+']').attr('selected',true)
 
-  zhiling.fail.forEach((element, idx)=> {
+  zhiling.failPrompt.forEach((element, idx)=> {
     if(idx === 0){
       var a = $('#commandExecFailIdTD').children().find('input').val(element)
     }else{
       addrow('commandExecFailId', element)
     }
   });
-  zhiling.success.forEach((element, idx)=> {
+  zhiling.successPrompt.forEach((element, idx)=> {
     if(idx === 0){
       var a = $('#commandExecSuccessIdTD').children().find('input').val(element)
     }else{
       addrow('commandExecSuccessId', element)
     }
   });
-  zhiling.reply.forEach((element, idx)=> {
+  zhiling.responseFlag.forEach((element, idx)=> {
     if(idx === 0){
       var a = $('#replyIdTD').children().find('input').val(element)
     }else{
@@ -258,8 +278,8 @@ function create(){
 }
 function initNew(){
   $(".busi3").html('<option value="all">全部业务</option>\n')
-  $.each(window.canshu.busiList, function(index, item) {
-    $(".busi3").append("<option value="+item.id+">" + item.name + "</option>\n")
+  $.each(window.canshu.serviceList, function(index, item) {
+    $(".busi3").append("<option value="+item.serviceCode+">" + item.serviceName + "</option>\n")
   })
 }
 
@@ -326,8 +346,8 @@ ajaxData(apiConfig['canshu'].url, {}, function(res){
   console.log('canshu: ajax请求失败');
 })
 
-ajaxData(apiConfig['zhiling'].url, {}, function(res){
-  apiConfig['zhiling'].callback(res)
-}, function(){
-  console.log('zhiling: ajax请求失败');
-})
+// ajaxData(apiConfig['zhiling'].url, {}, function(res){
+//   apiConfig['zhiling'].callback(res)
+// }, function(){
+//   console.log('zhiling: ajax请求失败');
+// })
