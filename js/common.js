@@ -77,7 +77,7 @@ function selectFile3(){
 			
 			
 jQuery(document).ready(function () {
-	jQuery("#jquery-accordion-menu").jqueryAccordionMenu();
+	jQuery("#jquery-accordion-menu") || jQuery("#jquery-accordion-menu").jqueryAccordionMenu();
 	
 });
 
@@ -92,13 +92,13 @@ $(function(){
 
 $(function () {
 
-    $("#organId").fSelect();
-	 $("#organId2").fSelect();
-	  $("#organId3").fSelect();
-	   $("#organId4").fSelect();
-	    $("#organId5").fSelect();
-		 $("#organId6").fSelect();
-		 $("#organId7").fSelect();
-		 $("#organId8").fSelect();
-		 $("#organId9").fSelect();
+  $("#organId") || $("#organId").fSelect();
+	$("#organId2") || $("#organId2").fSelect();
+	$("#organId3") || $("#organId3").fSelect();
+	$("#organId4") || $("#organId4").fSelect();
+	$("#organId5") || $("#organId5").fSelect();
+  $("#organId6") || $("#organId6").fSelect();
+  $("#organId7") || $("#organId7").fSelect();
+  $("#organId8") || $("#organId8").fSelect();
+  $("#organId9") || $("#organId9").fSelect();
 });

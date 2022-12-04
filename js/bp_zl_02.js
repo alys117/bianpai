@@ -1,12 +1,12 @@
 var apiConfig = {
   'mock': true,
-  'canshu': {
+  'zl': {
     url: "../mock/yyy.json",
     callback: function(res) {
       console.log(res)
-      window.canshu = res.data
       window.zhiling = {}
       window.zhiling.commandList = res.data.commandList
+      window.canshu = res.data
       window.canshu.netElementList = []
       window.canshu.supplierList = []
       window.canshu.serviceList.forEach(function(item){
@@ -48,17 +48,61 @@ var apiConfig = {
       $.each(res.data.netElementList, function(index, item) {
         // $(".wangyuan").append("<option value="+item.id+">" + item.name + "</option>\n")
       })
-    }
-  },
-  'zhiling': {
-    url: "../mock/zhiling.json",
-    callback: function(res) {
-      window.zhiling = res.data
-      $(".zhiling").html('')
-      $.each(res.data.zhilingList, function(index, item) {
-        $(".zhiling").append("<span data-id='"+item.id+"' onclick=\"zhilingInit()\">$(" + item.name + ")</span>\n")
+    },
+    resetCanshu: function(res) {
+      window.zhiling = {}
+      window.zhiling.commandList = res.data.commandList
+      window.canshu = res.data
+      window.canshu.netElementList = []
+      window.canshu.supplierList = []
+      window.canshu.serviceList.forEach(function(item){
+        item.netElementList.forEach(function(item2){
+          item2.serviceCode = item.serviceCode
+          item2.supplierList.forEach(function(item3){
+            item3.netElementCode = item2.netElementCode
+            item3.serviceCode = item.serviceCode
+          })
+          window.canshu.supplierList.push(...item2.supplierList)
+        })
+        window.canshu.netElementList.push(...item.netElementList)
       })
-    }
+      $(".busi2").html('<option value="all">全部业务</option>\n')
+      $.each(res.data.serviceList, function(index, item) {
+        $(".busi2").append("<option value="+item.serviceCode+">" + item.serviceName + "</option>\n")
+      })
+      $(".wangyuan2").html('<option value="all">全部网元</option>\n')
+      $(".canshu").html('')
+      $.each(res.data.paramList, function(index, item) {
+        $(".canshu").append("<button style='background: rgba(0,0,0,0);border:0'><span data-id='"+item.paramId+"' onclick=\"clickCanshu()\">$(" + item.paramName + ")</span></button>\n")
+      })
+    },
+    resetZhiling: function(res) {
+      window.zhiling = {}
+      window.zhiling.commandList = res.data.commandList
+      window.canshu = res.data
+      window.canshu.netElementList = []
+      window.canshu.supplierList = []
+      window.canshu.serviceList.forEach(function(item){
+        item.netElementList.forEach(function(item2){
+          item2.serviceCode = item.serviceCode
+          item2.supplierList.forEach(function(item3){
+            item3.netElementCode = item2.netElementCode
+            item3.serviceCode = item.serviceCode
+          })
+          window.canshu.supplierList.push(...item2.supplierList)
+        })
+        window.canshu.netElementList.push(...item.netElementList)
+      })
+      $(".busi").html('<option value="all">全部业务</option>\n')
+      $.each(res.data.serviceList, function(index, item) {
+        $(".busi").append("<option value="+item.serviceCode+">" + item.serviceName + "</option>\n")
+      })
+      $(".wangyuan").html('<option value="all">全部网元</option>\n')
+      $(".zhiling").html('')
+      $.each(res.data.commandList, function(index, item) {
+        $(".zhiling").append("<span data-id='"+item.commandId+"' onclick=\"zhilingInit()\">$(" + item.commandName + ")</span>\n")
+      })
+    },
   },
   "modify": {
     url: "/modify",
@@ -68,7 +112,6 @@ var apiConfig = {
         $('#modifyModelName').html('【'+$('#canshuId').html()+'】')
         $('#myModal6').modal('toggle');
         bpq.style.display='none';
-        fzcj.style.display='none'
       }
     }
   },
@@ -77,10 +120,9 @@ var apiConfig = {
     callback: function(res) {
       console.log(res)
       if(res.code === 200){
-        $('#newModelName').html('【$('+$('#_new_name').val()+')】')
+        $('#newModelName').html('【$('+$('#_new_commandName').val()+')】')
         $('#myModal5').modal('toggle');
-        bpq.style.display='none';
-        fzcj.style.display='none'
+        bpq2.style.display='none';
       }
     }
   }
@@ -128,14 +170,13 @@ function insertContent(content){
       }
   }
 }
-function changeBusi(busiClassName, wangyuanClassName) {
+function changeBusi(busiClassName, wangyuanClassName, vendorClassName) {
   var busi = $("."+busiClassName).val()
   $("."+wangyuanClassName).html('<option value="all">全部网元</option>\n')
+  $("."+vendorClassName).html('<option value="all">全部厂家</option>\n')
   if(busi === 'all') {
-    if(busiClassName === 'busi2'){
-      filterCanshu(window.canshu.paramList)
-    }else if(busiClassName === 'busi'){
-      filterZhiling(window.zhiling.zhilingList)
+    if(busiClassName === 'busi'){
+      filterZhiling(window.zhiling.commandList)
     }
   }else{
     var wangyuanList = window.canshu.netElementList.filter(function(item){
@@ -148,19 +189,29 @@ function changeBusi(busiClassName, wangyuanClassName) {
       var canshuList = window.canshu.paramList.filter(function(item){
         return item.serviceCode == busi
       })
-      if(busiClassName === 'busi2') filterCanshu(canshuList)
-    }else if(busiClassName === 'busi'){
-      var zhilingList = window.zhiling.zhilingList.filter(function(item){
-        return item.busiId == busi
+      filterCanshu(canshuList)
+    }
+    if(busiClassName === 'busi'){
+      var commandList = window.zhiling.commandList.filter(function(item){
+        return item.serviceCode == busi
       })
-      if(busiClassName === 'busi') filterZhiling(zhilingList)
+      filterZhiling(commandList)
     }
   }
 }
-function changeWangyuan(busiClassName, wangyuanClassName) {
+function changeWangyuan(busiClassName, wangyuanClassName, vendorClassName) {
   var busi = $("."+busiClassName).val()
   var wangyuan = $("."+wangyuanClassName).val()
-  if(busiClassName === 'busi2') {
+  if(busiClassName === 'busi'){
+    var commandList = window.zhiling.commandList.filter(function(item){
+      if(wangyuan === 'all'){
+        return item.serviceCode == busi
+      }else{
+        return item.serviceCode == busi && item.netElementCode == wangyuan
+      }
+    })
+    filterZhiling(commandList)
+  }else if(busiClassName === 'busi2') {
     var canshuList = window.canshu.paramList.filter(function(item){
       if(wangyuan === 'all'){
         return item.serviceCode == busi
@@ -169,15 +220,14 @@ function changeWangyuan(busiClassName, wangyuanClassName) {
       }
     })
     filterCanshu(canshuList)
-  }else if(busiClassName === 'busi'){
-    var zhilingList = window.zhiling.zhilingList.filter(function(item){
-      if(wangyuan === 'all'){
-        return item.serviceCode == busi
-      }else{
-        return item.serviceCode == busi && item.netElementCode == wangyuan
-      }
+  }else if(busiClassName === 'busi3'){
+    $("."+vendorClassName).html('<option value="all">全部厂家</option>\n')
+    var vendorList = window.canshu.supplierList.filter(function(item){
+      return item.serviceCode == busi && item.netElementCode == wangyuan
     })
-    filterZhiling(zhilingList)
+    $.each(vendorList, function(index, item) {
+      $("."+vendorClassName).append("<option value="+item.supplierCode+">" + item.supplierName + "</option>\n")
+    })
   }
 }
 function filterCanshu(canshuList) {
@@ -190,27 +240,62 @@ function filterCanshu(canshuList) {
 function filterZhiling(zhilingList) {
   $(".bp_zl_cs.zhiling").html('')
   $.each(zhilingList, function(index, item) {
-    $(".bp_zl_cs.zhiling").append("<span data-id='"+item.id+"' onclick=\"zhilingInit()\">$(" + item.name + ")</span>\n")
+    $(".bp_zl_cs.zhiling").append("<span data-id='"+item.commandId+"' onclick=\"zhilingInit()\">$(" + item.commandName + ")</span>\n")
   })
 }
 
 function zhilingInit(){
-  var id = event.target.dataset.id
   bpq.style.display='block';
   bpq2.style.display='none';
   // glcs.style.display='block';
   ycs.style.display='none'
 
-  var zhiling = window.zhiling.commandList.find(item=>item.commandId == id)
+  $('#resetModify').css({"display":"block"});
+  $('#resetNew').css({"display":"none"});
+  
+  var id = event.target.dataset.id
+  if(id) window.tmpId = id 
+  var zhiling = window.zhiling.commandList.find(item=>item.commandId == window.tmpId)
   console.log('zhiling :>> ', zhiling);
-  // select 被选中的操作代码
-  $('#commandType').find('option[value='+zhiling.commandType+']').attr('selected',true)
 
+  $('#_commandId').html(zhiling.commandId)
+  $('#_commandContent').html(zhiling.commandContent)
+  $("#_region").html(zhiling.region);
+  $("#_netel").html(zhiling.netElementName);
+  $("#_supplier").html(zhiling.supplierName);
+  $("#_commandName").html(zhiling.commandName);
+
+  // select 被选中的操作代码
+  // $('#_commandType').find('option[value='+zhiling.commandType+']').attr('selected',true)
+  // $('#_goldenLibCommand').find('option[value='+zhiling.goldenLibCommand+']').attr('selected',true)
+  $('#_commandType').val(zhiling.commandType)
+  $('#_goldenLibCommand').val(zhiling.goldenLibCommand)
+  
+  $("#_description").val(zhiling.description);
+  $("#_commandPrompt").val(zhiling.commandPrompt);
+  $("#_commandConfirm").val(zhiling.commandConfirm);
+  $("#_commandEnd").val(zhiling.commandEnd);
+  $("#_waitTimeout").val(zhiling.waitTimeout);
+  $("#_readTimeout").val(zhiling.readTimeout);
+  $.each($('#commandExecFailIdTD').children(), function(i,val){ 
+    if(i === 0 ){
+      $(val).find('input').val('')
+    }else{
+      $(val).remove()
+    }
+  });
   zhiling.failPrompt.forEach((element, idx)=> {
     if(idx === 0){
       var a = $('#commandExecFailIdTD').children().find('input').val(element)
     }else{
       addrow('commandExecFailId', element)
+    }
+  });
+  $.each($('#commandExecSuccessIdTD').children(), function(i,val){ 
+    if(i === 0 ){
+      $(val).find('input').val('')
+    }else{
+      $(val).remove()
     }
   });
   zhiling.successPrompt.forEach((element, idx)=> {
@@ -220,6 +305,13 @@ function zhilingInit(){
       addrow('commandExecSuccessId', element)
     }
   });
+  $.each($('#replyIdTD').children(), function(i,val){ 
+    if(i === 0 ){
+      $(val).find('input').val('')
+    }else{
+      $(val).remove()
+    }
+  });
   zhiling.responseFlag.forEach((element, idx)=> {
     if(idx === 0){
       var a = $('#replyIdTD').children().find('input').val(element)
@@ -227,17 +319,36 @@ function zhilingInit(){
       addrow('replyId', element)
     }
   });
-  
 }
 
 function modify(){
-  var id = $('#canshuId').data("id")
-  var busiId = $('#_busiId').val()
-  var wangyuanId = $('#_wangyuanId').val()
-  var vendor = $('#_vendor').val()
-  var version = $('#_version').val()
-  var rule = $('#_rule').val()
-  var obj ={id, busiId, wangyuanId, vendor, version, rule}
+  var commandId = $('#_commandId').html()
+  var commandContent = $('#_commandContent').html()
+  var commandType = $('#_commandType').val()
+  var goldenLibCommand = $('#_goldenLibCommand').val()
+  var description = $('#_description').val()
+  var commandPrompt = $('#_commandPrompt').val()
+  var commandConfirm = $('#_new_commandConfirm').val()
+  var commandEnd = $('#_commandEnd').val()
+  var commandConfirm = $('#_commandConfirm').val()
+  var commandPrompt = $('#_commandPrompt').val()
+  var failPrompt = [];
+  $('#commandExecFailIdTD').children().map(function(i, val){
+    failPrompt.push($(val).find('input').val())
+  })
+  var successPrompt = [];
+  $('#commandExecSuccessIdTD').children().map(function(i, val){
+    successPrompt.push($(val).find('input').val())
+  })
+  var responseFlag = [];
+  $('replyIdTD').children().map(function(i, val){
+    responseFlag.push($(val).find('input').val())
+  })
+  var readTimeout = $('#_readTimeout').val()
+  var waitTimeout = $('#_waitTimeout').val()
+  var obj ={commandContent, commandId, commandType, goldenLibCommand, description, commandPrompt
+    , commandConfirm, commandEnd, failPrompt, successPrompt, responseFlag
+    , readTimeout, waitTimeout}
   console.log(obj);
   postData(apiConfig['modify'],obj,function(res){
       apiConfig['modify'].callback(res)
@@ -254,14 +365,42 @@ function modify(){
     })
 }
 function create(){
-  var name = $('#_new_name').val()
-  var busiId = $('#_new_busi').val()
-  var wangyuanId = $('#_new_wangyuan').val()
-  var vendor = $('#_new_vendor').val()
-  var version = $('#_new_version').val()
-  var rule = $('#_new_rule').val()
-  var obj ={name, busiId,wangyuanId, vendor, version, rule}
+  var commandContent = $('#_new_commandContent').html()
+  var serviceCode = $('#_new_service').val()
+  var netElementCode = $('#_new_netel').val()
+  var supplierCode = $('#_nwe_supplier').val()
+  var commandName = $('#_new_commandName').val()
+  var commandType = $('#_new_commandType').val()
+  var goldenLibCommand = $('#_new_goldenLibCommand').val()
+  var description = $('#_new_description').val()
+  var commandPrompt = $('#_new_commandPrompt').val()
+  var commandConfirm = $('#_new_commandConfirm').val()
+  var commandEnd = $('#_new_commandEnd').val()
+  var commandConfirm = $('#_new_commandConfirm').val()
+  var commandPrompt = $('#_new_commandPrompt').val()
+  var failPrompt = [];
+  $('#newCommandExecFailIdTD').children().map(function(i, val){
+    failPrompt.push($(val).find('input').val())
+  })
+  var successPrompt = [];
+  $('#newCommandExecSuccessIdTD').children().map(function(i, val){
+    successPrompt.push($(val).find('input').val())
+  })
+  var responseFlag = [];
+  $('#newReplyIdTD').children().map(function(i, val){
+    responseFlag.push($(val).find('input').val())
+  })
+  var readTimeout = $('#_new_readTimeout').val()
+  var waitTimeout = $('#_new_waitTimeout').val()
+  var obj ={commandContent, serviceCode,netElementCode, supplierCode
+    , commandName, commandType, goldenLibCommand, description, commandPrompt
+    , commandConfirm, commandEnd, failPrompt, successPrompt, responseFlag
+    , readTimeout, waitTimeout}
   console.log(obj);
+  if(commandName === ''){alert('请填写名称');return}
+  if(serviceCode === 'all'){alert('请选择业务');return}
+  if(netElementCode === 'all'){alert('请选择网元');return}
+  if(supplierCode === 'all'){alert('请选择厂商');return}
   postData(apiConfig['create'],obj,function(res){
       apiConfig['create'].callback(res)
     }, function(){
@@ -277,10 +416,55 @@ function create(){
     })
 }
 function initNew(){
+  $('#resetModify').css({"display":"none"});
+  $('#resetNew').css({"display":"block"});
+  bpq.style.display='none';
+  bpq2.style.display='block';
+
   $(".busi3").html('<option value="all">全部业务</option>\n')
   $.each(window.canshu.serviceList, function(index, item) {
     $(".busi3").append("<option value="+item.serviceCode+">" + item.serviceName + "</option>\n")
   })
+  $(".wangyuan3").html('<option value="all">全部网元</option>\n')
+  $(".vendor3").html('<option value="all">全部厂商</option>\n')
+
+
+  $('#_new_commandContent').html('')
+  // $("#_new_region").html('');
+  // $("#_new_netel").html('');
+  // $("#_new_supplier").html('');
+  $("#_new_commandName").val('');
+
+  $('#_new_commandType').val('新增')
+  $('#_new_goldenLibCommand').val('否')
+  
+  $("#_new_description").val('');
+  $("#_new_commandPrompt").val('');
+  $("#_new_commandConfirm").val('');
+  $("#_new_commandEnd").val('');
+  $("#_new_waitTimeout").val('');
+  $("#_new_readTimeout").val('');
+  $.each($('#newCommandExecFailIdTD').children(), function(i,val){ 
+    if(i === 0 ){
+      $(val).find('input').val('')
+    }else{
+      $(val).remove()
+    }
+  });
+  $.each($('#newCommandExecSuccessIdTD').children(), function(i,val){ 
+    if(i === 0 ){
+      $(val).find('input').val('')
+    }else{
+      $(val).remove()
+    }
+  });
+  $.each($('#newReplyIdTD').children(), function(i,val){ 
+    if(i === 0 ){
+      $(val).find('input').val('')
+    }else{
+      $(val).remove()
+    }
+  });
 }
 
 function reset(){
@@ -333,17 +517,17 @@ function delrow(id){
   $('#'+id).remove()
 }
 
-function reload(val){
-  ajaxData(apiConfig[val].url, {}, function(res){
-    apiConfig[val].callback(res)
+function reload(type){
+  ajaxData(apiConfig['zl'].url, {}, function(res){
+    apiConfig['zl'][type](res)
   }, function(){
-    console.log(val+': ajax请求失败');
+    console.log('zl: ajax请求失败');
   })
 }
-ajaxData(apiConfig['canshu'].url, {}, function(res){
-  apiConfig['canshu'].callback(res)
+ajaxData(apiConfig['zl'].url, {}, function(res){
+  apiConfig['zl'].callback(res)
 }, function(){
-  console.log('canshu: ajax请求失败');
+  console.log('zl: ajax请求失败');
 })
 
 // ajaxData(apiConfig['zhiling'].url, {}, function(res){

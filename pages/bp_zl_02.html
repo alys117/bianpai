@@ -32,7 +32,7 @@
 				<div class="col-sm-3" style="padding-right:3px;">
 					<div class="panel panel-default" style="min-height:250px; margin-bottom: 3px;">
 						<div class="panel-heading"><h4 class="panel-title">
-									指令库<span class="fa fa-refresh pull-right pointer"></span><a class="pull-right" href="#" style="margin-right: 10px;" onclick="bpq2.style.display='block',bpq.style.display='none'">新增</a></span>
+									指令库<span class="fa fa-refresh pull-right pointer"  onclick="reload('resetZhiling')"></span><a class="pull-right" href="#" style="margin-right: 10px;" onclick="initNew()">新增</a></span>
 								</h4></div>
 						<div class="panel-body">
 							<form class="form-horizontal">
@@ -64,7 +64,7 @@
 					</div>
 					<div class="panel panel-default" style="min-height:250px;">
 						<div class="panel-heading"><h4 class="panel-title">
-									参数库<span class="fa fa-refresh pull-right pointer" onclick="reload('canshu')"></span>
+									参数库<span class="fa fa-refresh pull-right pointer" onclick="reload('resetCanshu')"></span>
 								</h4></div>
 						<div class="panel-body">
 							<form class="form-horizontal" id="ycs">
@@ -121,62 +121,64 @@
 				<div class="col-sm-9" style="padding-left:0px">
 					<div class="panel panel-default" style="min-height: 500px;">
 						<div class="panel-heading"><h4 class="panel-title">
-									编排区<span class="fa fa-refresh pull-right pointer"></span>
+									编排区<span class="fa fa-refresh pull-right pointer" style="display: block;" id="resetNew" onclick="initNew()"></span>
+                  <span class="fa fa-refresh pull-right pointer" style="display: none;" id="resetModify" onclick="zhilingInit()"></span>
 								</h4></div>
 						<div class="panel-body" id="bpq" style="display: none;">
-							<div class="leave-message-textarea" contenteditable="true">ADD CNACLD: P=0, pfx=K'<span>$(2)</span>,CSA=<span>$(CSA)</span>, RSC=<span>$(RSC)</span>, MINL=<span>$(MINL)</span>, MAXL=<span>$(MAXL)</span>, DEST=<span>$(DEST)</span>, ICLDTYPE=<span>$(ICLDTYPE)</span>,sDescription="<span>$(sDescription)</span>";</div>
+							<div id="_commandContent" class="leave-message-textarea" contenteditable="true">ADD CNACLD: P=0, pfx=K'<span>$(2)</span>,CSA=<span>$(CSA)</span>, RSC=<span>$(RSC)</span>, MINL=<span>$(MINL)</span>, MAXL=<span>$(MAXL)</span>, DEST=<span>$(DEST)</span>, ICLDTYPE=<span>$(ICLDTYPE)</span>,sDescription="<span>$(sDescription)</span>";</div>
 							<br>
 							<table class="table table-bordered">
 								<tbody>
+                  <tr style="display: none;"><td id="_commandId">111222</td><td></td></tr>
 									<tr>
 										<th  width="140">网元归属<span class="text-danger">*</span></th>
-										<td>NFV</td>
+										<td id="_region">NFV</td>
 									</tr>
 									<tr>
 										<th>网元名称<span class="text-danger">*</span></th>
-										<td>CMN</td>
+										<td id="_netel">CMN</td>
 									</tr>
 									<tr>
 										<th>设备厂商<span class="text-danger">*</span></th>
-										<td>华为</td>
+										<td id="_supplier">华为</td>
 									</tr>
 									<tr>
 										<th>指令名称<span class="text-danger">*</span></th>
-										<td>CMN_新增</td>
+										<td id="_commandName">CMN_新增</td>
 									</tr>
 									<tr>
 										<th>指令类型<span class="text-danger">*</span></th>
-										<td><select id="commandType" class="form-control input-sm" style="width: 200px;">
-												<option value="add">新增</option>
-												<option value="modify">修改</option>
-												<option>删除</option>
-												<option>采集</option>
-												<option>回滚</option>
-												<option>其他</option>
+										<td><select id="_commandType" class="form-control input-sm" style="width: 200px;">
+												<option value="新增">新增</option>
+												<option value="修改">修改</option>
+												<option value="删除">删除</option>
+												<option value="采集">采集</option>
+												<option value="回滚">回滚</option>
+												<option value="其他">其他</option>
 											</select></td>
 									</tr>
 									<tr>
 										<th>金库指令<span class="text-danger">*</span></th>
-										<td><select class="form-control input-sm" style="width: 200px;">
-												<option selected="selected">否</option>
-												<option>是</option>
+										<td><select id="_goldenLibCommand" class="form-control input-sm" style="width: 200px;">
+												<option value="否">否</option>
+												<option value="是">是</option>
 											</select></td>
 									</tr>
 									<tr>
 										<th>指令描述</th>
-										<td><textarea class="form-control input-sm"></textarea></td>
+										<td><textarea id="_description" class="form-control input-sm"></textarea></td>
 									</tr>
 									<tr>
 										<th>指令结束符</th>
-										<td><input type="text" class="form-control input-sm" style="width: 200px;"></td>
+										<td><input id="_commandEnd" type="text" class="form-control input-sm" style="width: 200px;"></td>
 									</tr>
 									<tr>
 										<th>指令确认符</th>
-										<td><input type="text" class="form-control input-sm" style="width: 200px;"></td>
+										<td><input id="_commandConfirm" type="text" class="form-control input-sm" style="width: 200px;"></td>
 									</tr>
 									<tr>
 										<th>命令行提示符</th>
-										<td><input type="text" class="form-control input-sm" style="width: 200px;"></td>
+										<td><input id="_commandPrompt" type="text" class="form-control input-sm" style="width: 200px;"></td>
 									</tr>
 									<tr>
 										<th id="commandExecSuccessId">命令执行成功标识符</th>
@@ -212,7 +214,7 @@
 										<th>读取超时时间</th>
 										<td>
 											<div class="input-group" style="width: 200px;">
-												<input type="text" class="form-control input-sm">
+												<input id="_readTimeout" type="text" class="form-control input-sm">
 												<div class="input-group-addon">ms</div>
 											</div>
 										</td>
@@ -221,14 +223,14 @@
 										<th>等待超时时间</th>
 										<td>
 											<div class="input-group" style="width: 200px;">
-												<input type="text" class="form-control input-sm">
+												<input id="_waitTimeout" type="text" class="form-control input-sm">
 												<div class="input-group-addon">ms</div>
 											</div>
 										</td>
 									</tr>
 									<tr>
-										<td colspan="2" align="center"><button type="button"
-												class="btn btn-submit btn-sm" data-toggle="modal" data-target="#myModal6"><span class="fa fa-check "></span> 修改
+										<td colspan="2" align="center"><button type="button" onclick="modify()"
+												class="btn btn-submit btn-sm" data-toggle="modal"><span class="fa fa-check "></span> 修改
 												</button></td>
 									</tr>
 								</tbody>
@@ -236,13 +238,13 @@
 						</div>
 						
 						<div class="panel-body" id="bpq2" style="display: none;">
-							<div class="leave-message-textarea" contenteditable="true"></div>
+							<div id="_new_commandContent" class="leave-message-textarea" contenteditable="true"></div>
 							<br>
 							<table class="table table-bordered">
 								<tbody>
 									<tr>
 										<th  width="140">网元归属<span class="text-danger">*</span></th>
-										<td><select class="form-control input-sm" style="width: 200px;">
+										<td><select id="_new_service" class="form-control input-sm busi3" style="width: 200px;" onchange="changeBusi('busi3','wangyuan3','vendor3')">
 												<option>请选择</option>
 												<option>...</option>
 												<option>...</option>
@@ -250,7 +252,7 @@
 									</tr>
 									<tr>
 										<th>网元名称<span class="text-danger">*</span></th>
-										<td><select class="form-control input-sm" style="width: 200px;">
+										<td><select id="_new_netel" class="form-control input-sm wangyuan3" style="width: 200px;" onchange="changeWangyuan('busi3','wangyuan3','vendor3')">
 												<option>请选择</option>
 												<option>...</option>
 												<option>...</option>
@@ -258,7 +260,7 @@
 									</tr>
 									<tr>
 										<th>设备厂商<span class="text-danger">*</span></th>
-										<td><select class="form-control input-sm" style="width: 200px;">
+										<td><select id="_nwe_supplier" class="form-control input-sm vendor3" style="width: 200px;">
 												<option>请选择</option>
 												<option>...</option>
 												<option>...</option>
@@ -266,11 +268,11 @@
 									</tr>
 									<tr>
 										<th>指令名称<span class="text-danger">*</span></th>
-										<td><input type="text" class="form-control input-sm" style="width: 200px;"></td>
+										<td><input id="_new_commandName" type="text" class="form-control input-sm" style="width: 200px;"></td>
 									</tr>
 									<tr>
 										<th>指令类型<span class="text-danger">*</span></th>
-										<td><select class="form-control input-sm" style="width: 200px;">
+										<td><select id="_new_commandType" class="form-control input-sm" style="width: 200px;">
 												<option>新增</option>
 												<option>修改</option>
 												<option>删除</option>
@@ -281,26 +283,26 @@
 									</tr>
 									<tr>
 										<th>金库指令<span class="text-danger">*</span></th>
-										<td><select class="form-control input-sm" style="width: 200px;">
+										<td><select id="_new_goldenLibCommand" class="form-control input-sm" style="width: 200px;">
 												<option selected="selected">否</option>
 												<option>是</option>
 											</select></td>
 									</tr>
 									<tr>
 										<th>指令描述</th>
-										<td><textarea class="form-control input-sm"></textarea></td>
+										<td><textarea id="_new_description" class="form-control input-sm"></textarea></td>
 									</tr>
 									<tr>
 										<th>指令结束符</th>
-										<td><input type="text" class="form-control input-sm" style="width: 200px;"></td>
+										<td><input id="_new_commandEnd" type="text" class="form-control input-sm" style="width: 200px;"></td>
 									</tr>
 									<tr>
 										<th>指令确认符</th>
-										<td><input type="text" class="form-control input-sm" style="width: 200px;"></td>
+										<td><input id="_new_commandConfirm" type="text" class="form-control input-sm" style="width: 200px;"></td>
 									</tr>
 									<tr>
 										<th>命令行提示符</th>
-										<td><input type="text" class="form-control input-sm" style="width: 200px;"></td>
+										<td><input id="_new_commandPrompt" type="text" class="form-control input-sm" style="width: 200px;"></td>
 									</tr>
 									<tr>
                     <th id="newCommandExecSuccessId">命令执行成功标识符</th>
@@ -336,7 +338,7 @@
 										<th>读取超时时间</th>
 										<td>
 											<div class="input-group" style="width: 200px;">
-												<input type="text" class="form-control input-sm">
+												<input id="_new_readTimeout" type="text" class="form-control input-sm">
 												<div class="input-group-addon">ms</div>
 											</div>
 										</td>
@@ -345,14 +347,14 @@
 										<th>等待超时时间</th>
 										<td>
 											<div class="input-group" style="width: 200px;">
-												<input type="text" class="form-control input-sm">
+												<input id="_new_waitTimeout" type="text" class="form-control input-sm">
 												<div class="input-group-addon">ms</div>
 											</div>
 										</td>
 									</tr>
 									<tr>
-										<td colspan="2" align="center"><button type="button"
-												class="btn btn-submit btn-sm" data-toggle="modal" data-target="#myModal5"><span class="fa fa-check "></span> 提交
+										<td colspan="2" align="center"><button type="button" onclick="create()"
+												class="btn btn-submit btn-sm" data-toggle="modal"><span class="fa fa-check "></span> 提交
 												</button></td>
 									</tr>
 								</tbody>
@@ -371,9 +373,9 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h5 class="modal-title"><strong>提示</strong></h5>
       </div>
-      <div class="modal-body"> 新增指令<span class="text-danger" >【NEW_新增】</span>成功 </div>
+      <div class="modal-body"> 新增指令<span class="text-danger" id="newModelName" >【NEW_新增】</span>成功 </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-submit btn-sm" data-dismiss="modal" onclick="bpq2.style.display='none',cs_new.style.display='inline-block'"><span class="fa fa-check"></span> 确定</button>
+        <button type="button" class="btn btn-submit btn-sm" data-dismiss="modal" onclick="bpq2.style.display='none'"><span class="fa fa-check"></span> 确定</button>
       </div>
     </div>
   </div>
