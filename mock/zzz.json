@@ -1,0 +1,88 @@
+{
+  "code": 200,
+  "data": {
+    "serviceList": [
+      { "serviceCode": "busi1", "serviceName": "业务1", "netElementList": [
+        { "netElementCode": "ne1", "netElementName": "网元1", "supplierList": [{"supplierCode":"vendor1","supplierName":"供应商1"}, {"supplierCode":"vendor2","supplierName":"供应商2"}] },
+        { "netElementCode": "ne2", "netElementName": "网元2", "supplierList": [{"supplierCode":"vendor3","supplierName":"供应商3"}, {"supplierCode":"vendor4","supplierName":"供应商4"}] }
+      ] },
+      { "serviceCode": "busi2", "serviceName": "业务2", "netElementList": [
+        { "netElementCode": "ne3", "netElementName": "网元3", "supplierList": [{"supplierCode":"vendor5","supplierName":"供应商5"}, {"supplierCode":"vendor6","supplierName":"供应商6"}] },
+        { "netElementCode": "ne4", "netElementName": "网元4", "supplierList": [{"supplierCode":"vendor7","supplierName":"供应商7"}, {"supplierCode":"vendor8","supplierName":"供应商8"}] }
+      ] },
+      { "serviceCode": "busi3", "serviceName": "业务3", "netElementList": [
+        { "netElementCode": "ne5", "netElementName": "网元5", "supplierList": [{"supplierCode":"vendor9","supplierName":"供应商9"}, {"supplierCode":"vendor10","supplierName":"供应商10"}] },
+        { "netElementCode": "ne6", "netElementName": "网元6", "supplierList": [{"supplierCode":"vendor11","supplierName":"供应商11"}, {"supplierCode":"vendor12","supplierName":"供应商12"}] }
+      ] }
+    ],
+    "commandList": [{
+      "commandContent": "ADD CNACLD: P=0, pfx=K'$(2),CSA=$(CSA), RSC=$(RSC), MINL=$(MINL), MAXL=$(MAXL), DEST=$(DEST), ICLDTYPE=$(ICLDTYPE),sDescription=\"$(sDescription)\";",
+      "region": "网元归属",
+      "serviceCode":"busi1",
+      "netElementName": "网元名称",
+      "netElementCode": "ne1",
+      "supplierName": "华为",
+      "supplierCode": "vendor1",
+      "commandName": "指令名称",
+      "commandType": "其他",
+      "goldenLibCommand": "否",
+      "description": "指令描述",
+      "commandPrompt": "命令行提示符",
+      "commandConfirm": "指令确认符",
+      "commandEnd": "指令结束符",
+      "failPrompt": ["命令执行失败标识符"],
+      "successPrompt": ["命令执行成功标识符"],
+      "responseFlag": ["应答标识符","应答标识符2"],
+      "readTimeout": "读取超时时间",
+      "waitTimeout": "等待超时时间",
+      "commandId": "commandId1"
+    },{
+      "commandContent": "UPDATE XXXX= $(ICLDTYPE),sDescription=\"$(sDescription)\" FROM YYY WHERE ABC=0;",
+      "region": "网元归属2",
+      "serviceCode":"busi1",
+      "netElementName": "网元名称2",
+      "netElementCode": "ne2",
+      "supplierName": "华为2",
+      "supplierCode": "vendor1",
+      "commandName": "指令名称2",
+      "commandType": "其他",
+      "goldenLibCommand": "否",
+      "description": "指令描述",
+      "commandPrompt": "命令行提示符",
+      "commandConfirm": "指令确认符",
+      "commandEnd": "指令结束符",
+      "failPrompt": ["命令执行失败标识符"],
+      "successPrompt": ["命令执行成功标识符"],
+      "responseFlag": ["应答标识符","应答标识符2"],
+      "readTimeout": "读取超时时间",
+      "waitTimeout": "等待超时时间",
+      "commandId": "commandId2"
+    }],
+    "templateList": [
+      {
+        "serviceCode":"busi1",
+        "serviceName":"业务1",
+        "netElementCode": "ne1",
+        "netElementName":"网元1",
+        "commandList": ["commandId1"],
+        "templateName": "模板名称",
+        "templateContent": "模板内容",
+        "templateType": "模板类型",
+        "templateId": "templateId1"
+      },
+      {
+        "serviceCode":"busi2",
+        "serviceName":"业务2",
+        "netElementCode": "ne3",
+        "netElementName":"网元3",
+        "commandList": ["commandId1", "commandId2"],
+        "templateName": "模板名称2",
+        "templateContent": "模板内容2",
+        "templateType": "模板类型2",
+        "templateId": "templateId2"
+      }
+    ]
+  },
+  "message": "success",
+  "success": true
+}

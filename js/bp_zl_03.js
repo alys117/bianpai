@@ -1,48 +1,49 @@
 var apiConfig = {
   'mock': true,
-  'wangyuan': {
-    url: "../mock/wangyuan.json",
+  'template': {
+    url: "../mock/zzz.json",
     callback: function(res) {
       console.log(res)
-      window.wangyuan = res.data
+      window.template = {}
+      window.template.templateList = res.data.templateList
+      window.zhiling = {}
+      window.zhiling.commandList = res.data.commandList
+      window.canshu = res.data
+      window.canshu.netElementList = []
+      window.canshu.supplierList = []
+      window.canshu.serviceList.forEach(function(item){
+        item.netElementList.forEach(function(item2){
+          item2.serviceCode = item.serviceCode
+          item2.supplierList.forEach(function(item3){
+            item3.netElementCode = item2.netElementCode
+            item3.serviceCode = item.serviceCode
+          })
+          window.canshu.supplierList.push(...item2.supplierList)
+        })
+        window.canshu.netElementList.push(...item.netElementList)
+      })
       $(".busi").html('<option value="all">全部业务</option>\n')
-      $.each(res.data.busiList, function(index, item) {
-        $(".busi").append("<option value="+item.id+">" + item.name + "</option>\n")
+      $.each(res.data.serviceList, function(index, item) {
+        $(".busi").append("<option value="+item.serviceCode+">" + item.serviceName + "</option>\n")
       })
       
       $(".wangyuan").html('<option value="all">全部网元</option>\n')
-      $.each(res.data.wangyuanList, function(index, item) {
-        // $(".wangyuan").append("<option value="+item.id+">" + item.name + "</option>\n")
-      })
 
       $(".busi2").html('<option value="all">全部业务</option>\n')
-      $.each(res.data.busiList, function(index, item) {
-        $(".busi2").append("<option value="+item.id+">" + item.name + "</option>\n")
+      $.each(res.data.serviceList, function(index, item) {
+        $(".busi2").append("<option value="+item.serviceCode+">" + item.serviceName + "</option>\n")
       })
       
       $(".wangyuan2").html('<option value="all">全部网元</option>\n')
-      $.each(res.data.wangyuanList, function(index, item) {
-        // $(".wangyuan").append("<option value="+item.id+">" + item.name + "</option>\n")
+
+      $(".zhiling").html('')
+      $.each(res.data.commandList, function(index, item) {
+        $(".zhiling").append("<span style=\"cursor:move\" data-id='"+item.commandId+"' class=item>$(" + item.commandName + ")</span>\n")
       })
-    }
-  },
-  'template': {
-    url: "../mock/template.json",
-    callback: function(res) {
-      window.template = res.data
+
       $(".template").html('')
       $.each(res.data.templateList, function(index, item) {
-        $(".template").append("<span data-id='"+item.id+"' onclick=\"templateInit()\">$(" + item.name + ")</span>\n")
-      })
-    }
-  },
-  'zhiling': {
-    url: "../mock/zhiling.json",
-    callback: function(res) {
-      window.zhiling = res.data
-      $(".zhiling").html('')
-      $.each(res.data.zhilingList, function(index, item) {
-        $(".zhiling").append("<span style=\"cursor:move\" data-id='"+item.id+"' class=item>$(" + item.name + ")</span>\n")
+        $(".template").append("<span data-id='"+item.templateId+"' onclick=\"templateInit()\">$(" + item.templateName + ")</span>\n")
       })
     }
   },
@@ -71,121 +72,79 @@ var apiConfig = {
     }
   }
 }
-function clickCanshu(){
-  var content = event.target.innerHTML
-  var sel = window.getSelection();
-  console.log('sel :>> ', sel);
-  function getClassName(el){
-    if(el.nodeName === 'DIV') {
-      return el.className
-    }else{
-      return getClassName(el.parentElement)
-    }
-  }
 
-  if(sel.anchorNode && getClassName(sel.anchorNode) === 'leave-message-textarea'){
-    insertContent(content)
-  }
-}
-function insertContent(content){
-  if (!content) {//如果插入的内容为空则返回
-      return
-  }
-  var sel = null;
-  if (document.selection) {//IE9以下
-      sel = document.selection;
-      sel.createRange().pasteHTML(content);
-  } else {
-      sel = window.getSelection();
-      if (sel.rangeCount > 0) {
-          var range = sel.getRangeAt(0);      //获取选择范围
-          range.deleteContents();             //删除选中的内容
-          var el = document.createElement("div"); //创建一个空的div外壳
-          el.innerHTML = content;                 //设置div内容为我们想要插入的内容。
-          var frag = document.createDocumentFragment();//创建一个空白的文档片段，便于之后插入dom树
-          var node = el.firstChild;
-          var lastNode = frag.appendChild(node);
-          range.insertNode(frag);                 //设置选择范围的内容为插入的内容
-          var contentRange = range.cloneRange();  //克隆选区
-          contentRange.setStartAfter(lastNode);          //设置光标位置为插入内容的末尾
-          contentRange.collapse(true);                   //移动光标位置到末尾
-          sel.removeAllRanges();                  //移出所有选区
-          sel.addRange(contentRange);             //添加修改后的选区
-      }
-  }
-}
-function changeBusi(busiClassName, wangyuanClassName) {
+function changeBusi(busiClassName, wangyuanClassName, vendorClassName) {
   var busi = $("."+busiClassName).val()
   $("."+wangyuanClassName).html('<option value="all">全部网元</option>\n')
+  $("."+vendorClassName).html('<option value="all">全部厂家</option>\n')
   if(busi === 'all') {
-    if(busiClassName === 'busi2'){
-      // filterCanshu(window.canshu.canshuList)
-    }else if(busiClassName === 'busi'){
-      // filterZhiling(window.zhiling.zhilingList)
+    if(busiClassName === 'busi'){
+      filterZhiling(window.zhiling.commandList)
     }
   }else{
-    var wangyuanList = window.wangyuan.wangyuanList.filter(function(item){
-      return item.busiId == busi
+    var wangyuanList = window.canshu.netElementList.filter(function(item){
+      return item.serviceCode == busi
     })
     $.each(wangyuanList, function(index, item) {
-      $("."+wangyuanClassName).append("<option value="+item.id+">" + item.name + "</option>\n")
+      $("."+wangyuanClassName).append("<option value="+item.netElementCode+">" + item.netElementName + "</option>\n")
     })
     if(busiClassName === 'busi2'){
-      var canshuList = window.canshu.canshuList.filter(function(item){
-        return item.busiId == busi
+      var list = window.template.templateList.filter(function(item){
+        return item.serviceCode == busi
       })
-      // if(busiClassName === 'busi2') filterCanshu(canshuList)
-    }else if(busiClassName === 'busi'){
-      var zhilingList = window.zhiling.zhilingList.filter(function(item){
-        return item.busiId == busi
+      filterTemplate(list)
+    }
+    if(busiClassName === 'busi'){
+      var commandList = window.zhiling.commandList.filter(function(item){
+        return item.serviceCode == busi
       })
-      // if(busiClassName === 'busi') filterZhiling(zhilingList)
+      filterZhiling(commandList)
     }
   }
 }
-function changeWangyuan(busiClassName, wangyuanClassName) {
+function changeWangyuan(busiClassName, wangyuanClassName, vendorClassName) {
   var busi = $("."+busiClassName).val()
   var wangyuan = $("."+wangyuanClassName).val()
-  if(busiClassName === 'busi2') {
-    var canshuList = window.wangyuan.canshuList.filter(function(item){
+  if(busiClassName === 'busi'){
+    var commandList = window.zhiling.commandList.filter(function(item){
       if(wangyuan === 'all'){
-        return item.busiId == busi
+        return item.serviceCode == busi
       }else{
-        return item.busiId == busi && item.wangyuanId == wangyuan
+        return item.serviceCode == busi && item.netElementCode == wangyuan
       }
     })
-    filterCanshu(canshuList)
-  }else if(busiClassName === 'busi'){
-    var zhilingList = window.zhiling.zhilingList.filter(function(item){
+    filterZhiling(commandList)
+  }else if(busiClassName === 'busi2') {
+    var list = window.template.templateList.filter(function(item){
       if(wangyuan === 'all'){
-        return item.busiId == busi
+        return item.serviceCode == busi
       }else{
-        return item.busiId == busi && item.wangyuanId == wangyuan
+        return item.serviceCode == busi && item.netElementCode == wangyuan
       }
     })
-    filterZhiling(zhilingList)
+    filterTemplate(list)
+  }else if(busiClassName === 'busi3'){
+    $("."+vendorClassName).html('<option value="all">全部厂家</option>\n')
+    var vendorList = window.canshu.supplierList.filter(function(item){
+      return item.serviceCode == busi && item.netElementCode == wangyuan
+    })
+    $.each(vendorList, function(index, item) {
+      $("."+vendorClassName).append("<option value="+item.supplierCode+">" + item.supplierName + "</option>\n")
+    })
   }
 }
-function filterCanshu(canshuList) {
-  $(".bp_zl_cs.canshu").html('')
-  $.each(canshuList, function(index, item) {
-    $(".bp_zl_cs.canshu").append("<span data-id='"+item.id+"'>$(" + item.name + ")</span>\n")
+function filterZhiling(list) {
+  $(".bp_zl_cs.zhiling").html('')
+  $.each(list, function(index, item) {
+    $(".bp_zl_cs.zhiling").append("<span data-id='"+item.commandId+"' onclick=\"zhilingInit()\">$(" + item.commandName + ")</span>\n")
   })
 }
 
-function filterZhiling(zhilingList) {
-  $(".bp_zl_cs.zhiling").html('')
-  $.each(zhilingList, function(index, item) {
-    $(".bp_zl_cs.zhiling").append("<span data-id='"+item.id+"'>$(" + item.name + ")</span>\n")
+function filterTemplate(list) {
+  $(".bp_zl_cs.template").html('')
+  $.each(list, function(index, item) {
+    $(".bp_zl_cs.template").append("<span data-id='"+item.templateId+"'>$(" + item.templateName + ")</span>\n")
   })
-}
-function canshuInit(){
-  bpq.style.display='block';bpq02.style.display='none'
-}
-function zhilingInit(){
-  var id = event.target.dataset.id
-  bpq.style.display='block';
-  bpq02.style.display='none';
 }
 
 function templateInit(){
@@ -193,6 +152,12 @@ function templateInit(){
   bpq.style.display='none';
   // glcs.style.display='block';
   // ycs.style.display='none'
+  var id = event.target.dataset.id
+  if(id) window.tmpId = id 
+  var template = window.template.templateList.find(item=>item.templateId == window.tmpId)
+  console.log('template :>> ', template);
+
+  $('#_serviceName').html(template.serviceName)
 }
 
 function modify(){
@@ -313,7 +278,7 @@ function delZhiling(el){
   }
 }
 
-/* 拖拽 */
+/**********  拖拽  ***********/
 //左侧
 var g1 = document.getElementById('g1');
 var ops1 = {
@@ -345,8 +310,8 @@ var ops2 = {
       $('#tip').css('display','none')
     }
     evt.item.style.display = 'block'
-    var zhiling = window.zhiling.zhilingList.find(it=>it.id==evt.item.dataset.id)
-    evt.item.innerHTML = '<span class="fa fa-trash-o sc_dw" onclick="delZhiling(this)"></span><pre>'+zhiling.command+'</pre>'
+    var zhiling = window.zhiling.commandList.find(it=>it.commandId == evt.item.dataset.id)
+    evt.item.innerHTML = '<span class="fa fa-trash-o sc_dw" onclick="delZhiling(this)"></span><pre>'+zhiling.commandContent+'</pre>'
     var arr = sortable2.toArray();
     console.log(arr);
   },
@@ -359,18 +324,8 @@ var ops2 = {
   },
 };
 var sortable2 = Sortable.create(g2, ops2);
-/* 拖拽 */
+/**********  拖拽  ***********/
 
-ajaxData(apiConfig['wangyuan'].url, {}, function(res){
-  apiConfig['wangyuan'].callback(res)
-}, function(){
-  console.log('wangyuan: ajax请求失败');
-})
-ajaxData(apiConfig['zhiling'].url, {}, function(res){
-  apiConfig['zhiling'].callback(res)
-}, function(){
-  console.log('zhiling: ajax请求失败');
-})
 ajaxData(apiConfig['template'].url, {}, function(res){
   apiConfig['template'].callback(res)
 }, function(){

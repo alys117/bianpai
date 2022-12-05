@@ -30,7 +30,7 @@
 				<div class="col-sm-3" style="padding-right:3px;">
 					<div class="panel panel-default" style="min-height: 250px; margin-bottom: 3px;">
 						<div class="panel-heading"><h4 class="panel-title">
-									指令库<span class="fa fa-refresh pull-right pointer"></span><span onclick="canshuInit()" style="float: right;font-weight: 200;">新增</span>
+									指令库<span class="fa fa-refresh pull-right pointer"></span><span onclick="canshuInit()" style="float: right;font-weight: 400;cursor: pointer;color: #3eb4fa;">新增</span>
 								</h4></div>
 						<div class="panel-body">
 							<form class="form-horizontal" id="ycs">
@@ -114,14 +114,14 @@
 
 									<tr>
 										<th width="100">网元归属</th>
-										<td><select class="form-control input-sm" style="width: 200px;" >
+										<td><select class="form-control input-sm busi3" style="width: 200px;" >
 												<option>NFV</option>
 												<option>一干</option>
 											</select></td>
 									</tr>
 									<tr>
 										<th>网元名称</th>
-										<td><select class="form-control input-sm" style="width: 200px;" >
+										<td><select class="form-control input-sm wangyuan3" style="width: 200px;" >
 												<option>...</option>
 												<option>...</option>
 												<option>...</option>
@@ -129,7 +129,7 @@
 									</tr>
 									<tr>
 										<th>厂商</th>
-										<td><select class="form-control input-sm" style="width: 200px;">
+										<td><select class="form-control input-sm vendor3" style="width: 200px;">
 												<option>...</option>
 												<option>...</option>
 											</select></td>
@@ -163,12 +163,13 @@
 						</div>
 						
 						<div class="panel-body" id="bpq02" style="display: none;">
-							<span class="fa fa-trash-o sc_dw"></span>
-							<pre>ADD CNACLD: P=0, pfx=K'$(e164AF), CSA=$(CSA), RSC=$(RSC), MINL=$(MINL), MAXL=$(MAXL), DEST=$(DEST), ICLDTYPE=$(ICLDTYPE), sDescription="$(sDescription)";</pre>
-							<span class="fa fa-trash-o sc_dw"></span>
-							<pre>ADD CNACLD: P=0, pfx=K'$(e164AF), CSA=$(CSA), RSC=$(RSC), MINL=$(MINL), MAXL=$(MAXL), DEST=$(DEST), ICLDTYPE=$(ICLDTYPE), sDescription="$(sDescription)";</pre>
-							<span class="fa fa-trash-o sc_dw"></span>
-							<pre>ADD CNACLD: P=0, pfx=K'$(e164AF), CSA=$(CSA), RSC=$(RSC), MINL=$(MINL), MAXL=$(MAXL), DEST=$(DEST), ICLDTYPE=$(ICLDTYPE), sDescription="$(sDescription)";</pre>
+              <div id="tip2">请拖入指令</div>
+              <div id="g3">
+                <div class="item">
+                  <span class="fa fa-trash-o sc_dw"></span>
+                  <pre>ADD CNACLD: P=0, pfx=K'$(e164AF), CSA=$(CSA), RSC=$(RSC), MINL=$(MINL), MAXL=$(MAXL), DEST=$(DEST), ICLDTYPE=$(ICLDTYPE), sDescription="$(sDescription)";</pre>
+                </div>
+              </div>
 							<br>
 							<table class="table table-bordered">
 						
@@ -176,7 +177,7 @@
 						
 									<tr>
 										<th width="100">网元归属</th>
-										<td>NFV</td>
+										<td id="_serviceName">NFV</td>
 									</tr>
 									<tr>
 										<th>网元名称</th>
