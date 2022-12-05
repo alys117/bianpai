@@ -102,7 +102,7 @@ var apiConfig = {
       $.each(res.data.commandList, function(index, item) {
         $(".zhiling").append("<span data-id='"+item.commandId+"' onclick=\"zhilingInit()\">$(" + item.commandName + ")</span>\n")
       })
-    },
+    }
   },
   "modify": {
     url: "/modify",
@@ -123,6 +123,7 @@ var apiConfig = {
         $('#newModelName').html('【$('+$('#_new_commandName').val()+')】')
         $('#myModal5').modal('toggle');
         bpq2.style.display='none';
+        reload('resetZhiling')
       }
     }
   }
@@ -248,7 +249,7 @@ function zhilingInit(){
   bpq.style.display='block';
   bpq2.style.display='none';
   // glcs.style.display='block';
-  ycs.style.display='none'
+  // ycs.style.display='none'
 
   $('#resetModify').css({"display":"block"});
   $('#resetNew').css({"display":"none"});
@@ -360,7 +361,7 @@ function modify(){
           msg: 'success'
         })
       }else{
-        console.log('canshu: ajax请求失败');
+        console.log('modify: ajax请求失败');
       }
     })
 }
@@ -411,7 +412,7 @@ function create(){
           msg: 'success'
         })
       }else{
-        console.log('canshu: ajax请求失败');
+        console.log('create: ajax请求失败');
       }
     })
 }

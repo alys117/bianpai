@@ -35,20 +35,20 @@
 					
 					<div class="panel panel-default" style="min-height: 250px;">
 						<div class="panel-heading"><h4 class="panel-title">
-									指令模板库<span class="fa fa-refresh pull-right pointer"></span>
+									指令模板库<span class="fa fa-refresh pull-right pointer" onclick="reload()"></span>
 								</h4></div>
 						<div class="panel-body">
 							<form class="form-horizontal">
 								<div class="form-group">
 									<div class="col-sm-6">
-										<select class="form-control input-sm">
+										<select class="form-control input-sm busi" onchange="changeBusi('busi','wangyuan')">
 											<option>全部业务</option>
 											<option>...</option>
 											<option>...</option>
 										</select>
 									</div>
 									<div class="col-sm-6">
-										<select class="form-control input-sm">
+										<select class="form-control input-sm wangyuan" onchange="changeWangyuan('busi','wangyuan')">
 											<option>全部网元</option>
 											<option>...</option>
 											<option>...</option>
@@ -56,7 +56,7 @@
 									</div>
 								</div>
 							</form>
-							<div class="bp_zl_cs">
+							<div class="bp_zl_cs template">
 								<span onclick="bpq.style.display='block'">CMN_短号码_新增_制作模板</span>
 								<span>CMN_短号码_修改_制作模板</span>
 								<span>CMN_短号码_删除_制作模板</span>
@@ -69,42 +69,42 @@
 				<div class="col-sm-9" style="padding-left:0px">
 					<div class="panel panel-default" style="min-height: 500px;">
 						<div class="panel-heading"><h4 class="panel-title">
-									编排区<span class="fa fa-refresh pull-right pointer"></span>
+									编排区<span class="fa fa-refresh pull-right pointer" onclick="templateInit()"></span>
 								</h4></div>
 						<div class="panel-body" style="display: none;" id="bpq">
-							<pre>ADD CNACLD: P=0, pfx=K'$(e164AF), CSA=$(CSA), RSC=$(RSC), MINL=$(MINL), MAXL=$(MAXL), DEST=$(DEST), ICLDTYPE=$(ICLDTYPE), sDescription="$(sDescription)";</pre>
-							<pre contenteditable="true" style="outline: none;">ADD CNACLD: P=0, pfx=K'$(e164AF), CSA=$(CSA), RSC=$(RSC), MINL=$(MINL), MAXL=$(MAXL), DEST=$(DEST), ICLDTYPE=$(ICLDTYPE), sDescription="$(sDescription)";</pre>
-							<div>ADD CNACLD: P=0, pfx=K'$(e164AF), CSA=$(CSA), RSC=$(RSC), MINL=$(MINL), MAXL=$(MAXL), DEST=$(DEST), ICLDTYPE=$(ICLDTYPE), sDescription="$(sDescription)";</div>
+              <div id="g3">
+              </div>
 							<br>
 							<table class="table table-bordered" style="position: relative;">
 
 								<tbody>
-
+                  <tr style="display: none;"><td id="_templateId"></td><td></td></tr>
+                  <tr style="display: none;"><td id="_templateName"></td><td></td></tr>
 									<tr>
 										<th width="100">业务</th>
-										<td>全网短号码</td>
+										<td id="_busi">全网短号码</td>
 									</tr>
 									<tr>
 										<th>网元</th>
-										<td>CMN</td>
+										<td id="_wangyuan">CMN</td>
 									</tr>
 									<tr>
 										<th>厂商</th>
-										<td>华为</td>
+										<td id="_vendor">华为</td>
 									</tr>
 									<tr>
 										<th>业务场景</th>
-										<td><select class="form-control input-sm" style="width: 200px;" >
-												<option>新增</option>
-												<option>...</option>
-												<option>...</option>
+										<td><select id="_scence" class="form-control input-sm" style="width: 200px;" >
+												<option value="新增">新增</option>
+												<option value="...">...</option>
+												<option value=",,,">,,,</option>
 											</select></td>
 									</tr>
 									
 									<tr>
 										<th>设备组</th>
 										<td><span style="display:inline-block;height: 30px;"></span>
-                      <select id="organId1" name="organId" multiple="multiple" style="width: 200px;">
+                      <select id="organId" name="demo" multiple="multiple" style="width: 200px;">
 										<option>...1</option>
 										<option>...2</option>
 										<option>...3</option>
@@ -112,11 +112,11 @@
 									</tr>
 									<tr>
 										<th>执行条件</th>
-										<td><input class="form-control input-sm" value="ADD"></td>
+										<td><input id="_condition" class="form-control input-sm" value="ADD"></td>
 									</tr>
 									<tr>
 										<th>描述</th>
-										<td><textarea class="form-control input-sm">传统CMN网元针对短号码业务的新增制作模板</textarea></td>
+										<td><textarea id="_description" class="form-control input-sm">传统CMN网元针对短号码业务的新增制作模板</textarea></td>
 									</tr>
 									
 									<tr>
@@ -127,17 +127,32 @@
 									</tr>
 								</tbody>
 							</table>
-<script>
-										$(function() {
-											
-											$("#organId1").fSelect(
-											{ showSearch: false,BtnFixed:false}
-											);
-										});
-									</script>
+              <script>
+                // $(function() {
+                  
+                // 	$("#organId").fSelect(
+                // 	{ showSearch: false,BtnFixed:false}
+                // 	);
+                // });
+							</script>
 						</div>
 					</div>
 				</div>
+<!-- Modal -->
+<div class="modal fade bs-example-modal-sm" id="myModal6" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h5 class="modal-title"><strong>提示</strong></h5>
+      </div>
+      <div class="modal-body"> 业务制作魔板配置<span class="text-danger" id="modifyModelName"></span>成功 </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-submit btn-sm" data-dismiss="modal" onclick="bpq.style.display='none'"><span class="fa fa-check"></span> 确定</button>
+      </div>
+    </div>
+  </div>
+</div>
 			</div>
 		</div>
 

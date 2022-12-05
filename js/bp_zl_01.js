@@ -55,6 +55,7 @@ var apiConfig = {
         $('#myModal5').modal('toggle');
         bpq.style.display='none';
         fzcj.style.display='none'
+        reload()
       }
     }
   }

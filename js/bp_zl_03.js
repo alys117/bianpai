@@ -45,6 +45,64 @@ var apiConfig = {
       $.each(res.data.templateList, function(index, item) {
         $(".template").append("<span data-id='"+item.templateId+"' onclick=\"templateInit()\">$(" + item.templateName + ")</span>\n")
       })
+    },
+    resetZhiling: function(res) {
+      window.template = {}
+      window.template.templateList = res.data.templateList
+      window.zhiling = {}
+      window.zhiling.commandList = res.data.commandList
+      window.canshu = res.data
+      window.canshu.netElementList = []
+      window.canshu.supplierList = []
+      window.canshu.serviceList.forEach(function(item){
+        item.netElementList.forEach(function(item2){
+          item2.serviceCode = item.serviceCode
+          item2.supplierList.forEach(function(item3){
+            item3.netElementCode = item2.netElementCode
+            item3.serviceCode = item.serviceCode
+          })
+          window.canshu.supplierList.push(...item2.supplierList)
+        })
+        window.canshu.netElementList.push(...item.netElementList)
+      })
+      $(".busi").html('<option value="all">全部业务</option>\n')
+      $.each(res.data.serviceList, function(index, item) {
+        $(".busi").append("<option value="+item.serviceCode+">" + item.serviceName + "</option>\n")
+      })
+      $(".wangyuan").html('<option value="all">全部网元</option>\n')
+      $(".zhiling").html('')
+      $.each(res.data.commandList, function(index, item) {
+        $(".zhiling").append("<span style=\"cursor:move\" data-id='"+item.commandId+"' class=item>$(" + item.commandName + ")</span>\n")
+      })
+    },
+    resetTemplate: function(res) {
+      window.template = {}
+      window.template.templateList = res.data.templateList
+      window.zhiling = {}
+      window.zhiling.commandList = res.data.commandList
+      window.canshu = res.data
+      window.canshu.netElementList = []
+      window.canshu.supplierList = []
+      window.canshu.serviceList.forEach(function(item){
+        item.netElementList.forEach(function(item2){
+          item2.serviceCode = item.serviceCode
+          item2.supplierList.forEach(function(item3){
+            item3.netElementCode = item2.netElementCode
+            item3.serviceCode = item.serviceCode
+          })
+          window.canshu.supplierList.push(...item2.supplierList)
+        })
+        window.canshu.netElementList.push(...item.netElementList)
+      })
+      $(".busi2").html('<option value="all">全部业务</option>\n')
+      $.each(res.data.serviceList, function(index, item) {
+        $(".busi2").append("<option value="+item.serviceCode+">" + item.serviceName + "</option>\n")
+      })
+      $(".wangyuan2").html('<option value="all">全部网元</option>\n')
+      $(".template").html('')
+      $.each(res.data.templateList, function(index, item) {
+        $(".template").append("<span data-id='"+item.templateId+"' onclick=\"tempateInit()\">$(" + item.templateName + ")</span>\n")
+      })
     }
   },
   "modify": {
@@ -52,10 +110,10 @@ var apiConfig = {
     callback: function(res) {
       console.log(res)
       if(res.code === 200){
-        $('#modifyModelName').html('【'+$('#canshuId').html()+'】')
+        $('#modifyModelName').html('【'+$('#_templateName').val()+'】')
         $('#myModal6').modal('toggle');
         bpq.style.display='none';
-        fzcj.style.display='none'
+        // fzcj.style.display='none'
       }
     }
   },
@@ -64,10 +122,11 @@ var apiConfig = {
     callback: function(res) {
       console.log(res)
       if(res.code === 200){
-        $('#newModelName').html('【$('+$('#_new_name').val()+')】')
+        $('#newModelName').html('【$('+$('#_new_templateName').val()+')】')
         $('#myModal5').modal('toggle');
-        bpq.style.display='none';
-        fzcj.style.display='none'
+        bpq02.style.display='none';
+        // fzcj.style.display='none'
+        reload('resetTemplate')
       }
     }
   }
@@ -80,6 +139,9 @@ function changeBusi(busiClassName, wangyuanClassName, vendorClassName) {
   if(busi === 'all') {
     if(busiClassName === 'busi'){
       filterZhiling(window.zhiling.commandList)
+    }
+    if(busiClassName === 'busi2'){
+      filterTemplate(window.template.templateList)
     }
   }else{
     var wangyuanList = window.canshu.netElementList.filter(function(item){
@@ -148,6 +210,8 @@ function filterTemplate(list) {
 }
 
 function templateInit(){
+  $('#resetModify').css({"display":"block"});
+  $('#resetNew').css({"display":"none"});
   bpq02.style.display='block';
   bpq.style.display='none';
   // glcs.style.display='block';
@@ -157,18 +221,38 @@ function templateInit(){
   var template = window.template.templateList.find(item=>item.templateId == window.tmpId)
   console.log('template :>> ', template);
 
+  $('#_templateId').html(template.templateId)
   $('#_serviceName').html(template.serviceName)
+  $('#_netElementName').html(template.netElementName)
+  $('#_supplierName').html(template.supplierName)
+  $('#_templateType').html(template.templateType)
+  $('#_templateName').val(template.templateName)
+  $('#_description').val(template.description)
+
+  $('#g3').html('')
+  template.commandList.forEach(item=>{
+    var zhiling = window.zhiling.commandList.find(it=>it.commandId == item)
+    $('#g3').append('<span style="cursor: move; display: block;" data-id="'+item+'" class="item" draggable="false">'
+    +'<span class="fa fa-trash-o sc_dw" onclick="delZhiling(this)"></span><pre>'+zhiling.commandContent+'</pre></span>')
+  })
+  
+  if($('#g3').children().length>0){
+    $('#tipg3').css('display','none')
+  }
 }
 
 function modify(){
-  var id = $('#canshuId').data("id")
-  var busiId = $('#_busiId').val()
-  var wangyuanId = $('#_wangyuanId').val()
-  var vendor = $('#_vendor').val()
-  var version = $('#_version').val()
-  var rule = $('#_rule').val()
-  var obj ={id, busiId, wangyuanId, vendor, version, rule}
+  var templateId = $('#_templateId').html()
+  var description = $('#_description').val()
+  var templateName = $('#_templateName').val()
+  var commandList = []
+  $('#g3').children().each(function(index, item){
+    commandList.push(item.dataset.id)
+  })
+  var obj ={templateName, templateId, description, commandList}
   console.log(obj);
+  if(!templateName) {alert('模板名称不能为空');return}
+  if(commandList.length == 0) {alert('指令不能为空');return}
   postData(apiConfig['modify'],obj,function(res){
       apiConfig['modify'].callback(res)
     }, function(){
@@ -184,14 +268,23 @@ function modify(){
     })
 }
 function create(){
-  var name = $('#_new_name').val()
-  var busiId = $('#_new_busi').val()
-  var wangyuanId = $('#_new_wangyuan').val()
-  var vendor = $('#_new_vendor').val()
-  var version = $('#_new_version').val()
-  var rule = $('#_new_rule').val()
-  var obj ={name, busiId,wangyuanId, vendor, version, rule}
+  var serviceCode = $('#_new_busi').val()
+  var netElementCode = $('#_new_wangyuan').val()
+  var supplierCode = $('#_new_vendor').val()
+  var templateType = $('#_new_templateType').val()
+  var description = $('#_new_description').val()
+  var templateName = $('#_new_templateName').val()
+  var commandList = []
+  $('#g2').children().each(function(index, item){
+    commandList.push(item.dataset.id)
+  })
+  var obj ={serviceCode,netElementCode, supplierCode,templateType,templateName, description, commandList}
   console.log(obj);
+  if(serviceCode === 'all'){alert('请选择业务');return}
+  if(netElementCode === 'all'){alert('请选择网元');return}
+  if(supplierCode === 'all'){alert('请选择厂商');return}
+  if(!templateName) {alert('模板名称不能为空');return}
+  if(commandList.length == 0) {alert('指令不能为空');return}
   postData(apiConfig['create'],obj,function(res){
       apiConfig['create'].callback(res)
     }, function(){
@@ -207,10 +300,21 @@ function create(){
     })
 }
 function initNew(){
+  $('#resetModify').css({"display":"none"});
+  $('#resetNew').css({"display":"block"});
+  bpq.style.display='block';
+  bpq02.style.display='none';
   $(".busi3").html('<option value="all">全部业务</option>\n')
-  $.each(window.canshu.busiList, function(index, item) {
-    $(".busi3").append("<option value="+item.id+">" + item.name + "</option>\n")
+  $.each(window.canshu.serviceList, function(index, item) {
+    $(".busi3").append("<option value="+item.serviceCode+">" + item.serviceName + "</option>\n")
   })
+  $(".wangyuan3").html('<option value="all">全部网元</option>\n')
+  $(".vendor3").html('<option value="all">全部厂商</option>\n')
+  $("#_new_templateType").val('制作')
+  $("#_new_templateName").val('')
+  $("#_new_description").val('')
+  $("#tipg2").css('display','block')
+  $("#g2").html('')
 }
 
 function reset(){
@@ -252,29 +356,20 @@ function postData(url, data, callback, failCallback) {
   })
 }
 
-function addrow(id, value){
-  var divid = id+'_'+ new Date().getTime()
-  $('#'+id+'TD').append(
-  '<div id="'+divid+'" class="input-group" style="width: 200px;margin-top: 10px;">'+
-  '<input type="text" class="form-control input-sm" value="'+(value?value:'')+'">'+
-  '<div class="input-group-addon pointer" onclick="delrow(\''+divid+'\')"><span class="fa fa-minus"></span></div>')
-}
-function delrow(id){
-  $('#'+id).remove()
-}
-
-function reload(val){
-  ajaxData(apiConfig[val].url, {}, function(res){
-    apiConfig[val].callback(res)
+function reload(type){
+  ajaxData(apiConfig['template'].url, {}, function(res){
+    apiConfig['template'][type](res)
   }, function(){
-    console.log(val+': ajax请求失败');
+    console.log('template: ajax请求失败');
   })
 }
+
 function delZhiling(el){
-  console.log($(el));
+  console.log($(el),$(el.parentElement.parentElement).attr('id'));
+  var id = $(el.parentElement.parentElement).attr('id')
   el.parentElement.remove()
-  if($('#g2').children().length === 0){
-    $('#tip').css('display','block')
+  if($('#'+id).children().length === 0){
+    $('#tip'+id).css('display','block')
   }
 }
 
@@ -307,7 +402,7 @@ var ops2 = {
     console.log('g2 onAdd', evt);
     console.log($('#g2').children()); 
     if($('#g2').children().length>0){
-      $('#tip').css('display','none')
+      $('#tipg2').css('display','none')
     }
     evt.item.style.display = 'block'
     var zhiling = window.zhiling.commandList.find(it=>it.commandId == evt.item.dataset.id)
@@ -324,6 +419,33 @@ var ops2 = {
   },
 };
 var sortable2 = Sortable.create(g2, ops2);
+
+var g3 = document.getElementById('g3');
+var ops3 = {
+  animation: 100,
+  draggable: ".item",
+  group: { name: "zhiling", pull: true, put: true },
+  onAdd(evt) {
+    console.log('g3 onAdd', evt);
+    console.log($('#g3').children()); 
+    if($('#g3').children().length>0){
+      $('#tipg3').css('display','none')
+    }
+    evt.item.style.display = 'block'
+    var zhiling = window.zhiling.commandList.find(it=>it.commandId == evt.item.dataset.id)
+    evt.item.innerHTML = '<span class="fa fa-trash-o sc_dw" onclick="delZhiling(this)"></span><pre>'+zhiling.commandContent+'</pre>'
+    var arr = sortable2.toArray();
+    console.log(arr);
+  },
+  //拖动结束
+  onEnd: function (evt) {
+    console.log('g2 onEnd', evt);
+    //获取拖动后的排序
+    var arr = sortable3.toArray();
+    console.log(arr);
+  },
+};
+var sortable3 = Sortable.create(g3, ops3);
 /**********  拖拽  ***********/
 
 ajaxData(apiConfig['template'].url, {}, function(res){

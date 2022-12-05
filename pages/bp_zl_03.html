@@ -30,7 +30,7 @@
 				<div class="col-sm-3" style="padding-right:3px;">
 					<div class="panel panel-default" style="min-height: 250px; margin-bottom: 3px;">
 						<div class="panel-heading"><h4 class="panel-title">
-									指令库<span class="fa fa-refresh pull-right pointer"></span><span onclick="canshuInit()" style="float: right;font-weight: 400;cursor: pointer;color: #3eb4fa;">新增</span>
+									指令库<span class="fa fa-refresh pull-right pointer"  onclick="reload('resetZhiling')"></span><span onclick="initNew()" style="float: right;font-weight: 400;cursor: pointer;color: #3eb4fa;">新增</span>
 								</h4></div>
 						<div class="panel-body">
 							<form class="form-horizontal" id="ycs">
@@ -62,7 +62,7 @@
 					</div>
 					<div class="panel panel-default" style="min-height: 250px;">
 						<div class="panel-heading"><h4 class="panel-title">
-									指令模板库<span class="fa fa-refresh pull-right pointer"></span>
+									指令模板库<span class="fa fa-refresh pull-right pointer"  onclick="reload('resetTemplate')"></span>
 								</h4></div>
 						<div class="panel-body">
 							<form class="form-horizontal">
@@ -97,10 +97,11 @@
 				<div class="col-sm-9" style="padding-left:0px">
 					<div class="panel panel-default" style="min-height: 500px;">
 						<div class="panel-heading"><h4 class="panel-title">
-									编排区<span class="fa fa-refresh pull-right pointer"></span>
+									编排区<span class="fa fa-refresh pull-right pointer" style="display: block;" id="resetNew" onclick="initNew()"></span>
+                  <span class="fa fa-refresh pull-right pointer" style="display: none;" id="resetModify" onclick="templateInit()"></span>
 								</h4></div>
 						<div class="panel-body" id="bpq" style="display: none;">
-              <div id="tip">请拖入指令</div>
+              <div id="tipg2">请拖入指令</div>
               <div id="g2">
                 <!-- <div class="item">
                   <span class="fa fa-trash-o sc_dw"></span>
@@ -114,14 +115,14 @@
 
 									<tr>
 										<th width="100">网元归属</th>
-										<td><select class="form-control input-sm busi3" style="width: 200px;" >
+										<td><select id="_new_busi" class="form-control input-sm busi3" style="width: 200px;" onchange="changeBusi('busi3','wangyuan3','vendor3')">
 												<option>NFV</option>
 												<option>一干</option>
 											</select></td>
 									</tr>
 									<tr>
 										<th>网元名称</th>
-										<td><select class="form-control input-sm wangyuan3" style="width: 200px;" >
+										<td><select id="_new_wangyuan" class="form-control input-sm wangyuan3" style="width: 200px;" onchange="changeWangyuan('busi3','wangyuan3','vendor3')">
 												<option>...</option>
 												<option>...</option>
 												<option>...</option>
@@ -129,31 +130,31 @@
 									</tr>
 									<tr>
 										<th>厂商</th>
-										<td><select class="form-control input-sm vendor3" style="width: 200px;">
+										<td><select id="_new_vendor" class="form-control input-sm vendor3" style="width: 200px;">
 												<option>...</option>
 												<option>...</option>
 											</select></td>
 									</tr>
 									<tr>
 										<th>模板类型</th>
-										<td><select class="form-control input-sm" style="width: 200px;" >
-												<option>制作</option>
-												<option>全量采集</option>
-												<option>增量采集</option>
+										<td><select id="_new_templateType" class="form-control input-sm" style="width: 200px;" >
+												<option value="制作">制作</option>
+												<option value="全量采集">全量采集</option>
+												<option value="增量采集">增量采集</option>
 											</select></td>
 									</tr>
 									<tr>
 										<th>模板名称</th>
-										<td><input type="text" class="form-control input-sm" style="width: 400px;" placeholder="例如：CMN_短号码_新增_制作模板（必须按规范命名）"></td>
+										<td><input id="_new_templateName" type="text" class="form-control input-sm" style="width: 400px;" placeholder="例如：CMN_短号码_新增_制作模板（必须按规范命名）"></td>
 									</tr>
 									<tr>
 										<th>描述</th>
-										<td><textarea class="form-control input-sm"></textarea></td>
+										<td><textarea id="_new_description" class="form-control input-sm"></textarea></td>
 									</tr>
 									
 									<tr>
-										<td colspan="2" align="center"><button type="button"
-												class="btn btn-submit btn-sm" data-toggle="modal" data-target="#myModal6"><span
+										<td colspan="2" align="center"><button type="button" onclick="create()"
+												class="btn btn-submit btn-sm" data-toggle="modal"><span
 													class="fa fa-check "></span>
 												新增</button></td>
 									</tr>
@@ -163,46 +164,46 @@
 						</div>
 						
 						<div class="panel-body" id="bpq02" style="display: none;">
-              <div id="tip2">请拖入指令</div>
+              <div id="tipg3">请拖入指令</div>
               <div id="g3">
-                <div class="item">
+                <!-- <div class="item">
                   <span class="fa fa-trash-o sc_dw"></span>
                   <pre>ADD CNACLD: P=0, pfx=K'$(e164AF), CSA=$(CSA), RSC=$(RSC), MINL=$(MINL), MAXL=$(MAXL), DEST=$(DEST), ICLDTYPE=$(ICLDTYPE), sDescription="$(sDescription)";</pre>
-                </div>
+                </div> -->
               </div>
 							<br>
 							<table class="table table-bordered">
 						
 								<tbody>
-						
+                  <tr style="display: none;"><td id="_templateId">111222</td><td></td></tr>
 									<tr>
 										<th width="100">网元归属</th>
 										<td id="_serviceName">NFV</td>
 									</tr>
 									<tr>
 										<th>网元名称</th>
-										<td>CMN</td>
+										<td id="_netElementName">CMN</td>
 									</tr>
 									<tr>
 										<th>厂商</th>
-										<td>华为</td>
+										<td id="_supplierName">华为</td>
 									</tr>
 									<tr>
 										<th>模板类型</th>
-										<td>制作</td>
+										<td id="_templateType">制作</td>
 									</tr>
 									<tr>
 										<th>模板名称</th>
-										<td><input type="text" class="form-control input-sm" style="width: 400px;" placeholder="例如：CMN_短号码_新增_制作模板（必须按规范命名）" value="CMN_短号码_新增_制作模板"></td>
+										<td><input id="_templateName" type="text" class="form-control input-sm" style="width: 400px;" placeholder="例如：CMN_短号码_新增_制作模板（必须按规范命名）" value="CMN_短号码_新增_制作模板"></td>
 									</tr>
 									<tr>
 										<th>描述</th>
-										<td><textarea class="form-control input-sm"></textarea></td>
+										<td><textarea id="_description" class="form-control input-sm"></textarea></td>
 									</tr>
 									
 									<tr>
-										<td colspan="2" align="center"><button type="button"
-												class="btn btn-submit btn-sm" data-toggle="modal" data-target="#myModal5"><span
+										<td colspan="2" align="center"><button type="button" onclick="modify()"
+												class="btn btn-submit btn-sm" data-toggle="modal"><span
 													class="fa fa-check" ></span>
 												提交</button></td>
 									</tr>
@@ -218,14 +219,14 @@
 
 
 <!-- Modal -->
-<div class="modal fade bs-example-modal-sm" id="myModal5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade bs-example-modal-sm" id="myModal6" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h5 class="modal-title"><strong>提示</strong></h5>
       </div>
-      <div class="modal-body"> 修改指令库模板<span class="text-danger" >【CMN_短号码_新增_制作模板】</span>成功 </div>
+      <div class="modal-body"> 修改指令库模板<span class="text-danger" id="modifyModelName">【CMN_短号码_新增_制作模板】</span>成功 </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-submit btn-sm" data-dismiss="modal" onclick="bpq02.style.display='none'"><span class="fa fa-check"></span> 确定</button>
       </div>
@@ -234,16 +235,16 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade bs-example-modal-sm" id="myModal6" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade bs-example-modal-sm" id="myModal5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog modal-sm" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h5 class="modal-title"><strong>提示</strong></h5>
       </div>
-      <div class="modal-body"> 新增指令库模板<span class="text-danger" >【NEW_短号码_新增_制作模板】</span>成功 </div>
+      <div class="modal-body"> 新增指令库模板<span class="text-danger" id="newModelName" >【NEW_短号码_新增_制作模板】</span>成功 </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-submit btn-sm" data-dismiss="modal" onclick="bpq.style.display='none',mb_new.style.display='inline-block'"><span class="fa fa-check"></span> 确定</button>
+        <button type="button" class="btn btn-submit btn-sm" data-dismiss="modal" onclick="bpq.style.display='none'"><span class="fa fa-check"></span> 确定</button>
       </div>
     </div>
   </div>

@@ -1,48 +1,35 @@
 var apiConfig = {
   'mock': true,
-  'wangyuan': {
-    url: "../mock/wangyuan.json",
+  'last': {
+    url: "../mock/last.json",
     callback: function(res) {
       console.log(res)
-      window.wangyuan = res.data
+      window.zhiling = {}
+      window.zhiling.commandList = res.data.commandList
+      window.template = {}
+      window.template.templateList = res.data.templateList
+      window.canshu = res.data
+      window.canshu.netElementList = []
+      window.canshu.supplierList = []
+      window.canshu.serviceList.forEach(function(item){
+        item.netElementList.forEach(function(item2){
+          item2.serviceCode = item.serviceCode
+          item2.supplierList.forEach(function(item3){
+            item3.netElementCode = item2.netElementCode
+            item3.serviceCode = item.serviceCode
+          })
+          window.canshu.supplierList.push(...item2.supplierList)
+        })
+        window.canshu.netElementList.push(...item.netElementList)
+      })
       $(".busi").html('<option value="all">全部业务</option>\n')
-      $.each(res.data.busiList, function(index, item) {
-        $(".busi").append("<option value="+item.id+">" + item.name + "</option>\n")
+      $.each(res.data.serviceList, function(index, item) {
+        $(".busi").append("<option value="+item.serviceCode+">" + item.serviceName + "</option>\n")
       })
-      
       $(".wangyuan").html('<option value="all">全部网元</option>\n')
-      $.each(res.data.wangyuanList, function(index, item) {
-        // $(".wangyuan").append("<option value="+item.id+">" + item.name + "</option>\n")
-      })
-
-      $(".busi2").html('<option value="all">全部业务</option>\n')
-      $.each(res.data.busiList, function(index, item) {
-        $(".busi2").append("<option value="+item.id+">" + item.name + "</option>\n")
-      })
-      
-      $(".wangyuan2").html('<option value="all">全部网元</option>\n')
-      $.each(res.data.wangyuanList, function(index, item) {
-        // $(".wangyuan").append("<option value="+item.id+">" + item.name + "</option>\n")
-      })
-    }
-  },
-  'template': {
-    url: "../mock/template.json",
-    callback: function(res) {
-      window.template = res.data
       $(".template").html('')
       $.each(res.data.templateList, function(index, item) {
-        $(".template").append("<span data-id='"+item.id+"' onclick=\"templateInit()\">$(" + item.name + ")</span>\n")
-      })
-    }
-  },
-  'zhiling': {
-    url: "../mock/zhiling.json",
-    callback: function(res) {
-      window.zhiling = res.data
-      $(".zhiling").html('')
-      $.each(res.data.zhilingList, function(index, item) {
-        $(".zhiling").append("<span style=\"cursor:move\" data-id='"+item.id+"' class=item>$(" + item.name + ")</span>\n")
+        $(".template").append("<span data-id='"+item.templateId+"' onclick=\"templateInit()\">$(" + item.templateName + ")</span>\n")
       })
     }
   },
@@ -51,207 +38,90 @@ var apiConfig = {
     callback: function(res) {
       console.log(res)
       if(res.code === 200){
-        $('#modifyModelName').html('【'+$('#canshuId').html()+'】')
+        $('#modifyModelName').html('【'+$('#_templateName').html()+'】')
         $('#myModal6').modal('toggle');
         bpq.style.display='none';
-        fzcj.style.display='none'
       }
     }
-  },
-  "create": {
-    url: "/create",
-    callback: function(res) {
-      console.log(res)
-      if(res.code === 200){
-        $('#newModelName').html('【$('+$('#_new_name').val()+')】')
-        $('#myModal5').modal('toggle');
-        bpq.style.display='none';
-        fzcj.style.display='none'
-      }
-    }
-  }
-}
-function clickCanshu(){
-  var content = event.target.innerHTML
-  var sel = window.getSelection();
-  console.log('sel :>> ', sel);
-  function getClassName(el){
-    if(el.nodeName === 'DIV') {
-      return el.className
-    }else{
-      return getClassName(el.parentElement)
-    }
-  }
-
-  if(sel.anchorNode && getClassName(sel.anchorNode) === 'leave-message-textarea'){
-    insertContent(content)
-  }
-}
-function insertContent(content){
-  if (!content) {//如果插入的内容为空则返回
-      return
-  }
-  var sel = null;
-  if (document.selection) {//IE9以下
-      sel = document.selection;
-      sel.createRange().pasteHTML(content);
-  } else {
-      sel = window.getSelection();
-      if (sel.rangeCount > 0) {
-          var range = sel.getRangeAt(0);      //获取选择范围
-          range.deleteContents();             //删除选中的内容
-          var el = document.createElement("div"); //创建一个空的div外壳
-          el.innerHTML = content;                 //设置div内容为我们想要插入的内容。
-          var frag = document.createDocumentFragment();//创建一个空白的文档片段，便于之后插入dom树
-          var node = el.firstChild;
-          var lastNode = frag.appendChild(node);
-          range.insertNode(frag);                 //设置选择范围的内容为插入的内容
-          var contentRange = range.cloneRange();  //克隆选区
-          contentRange.setStartAfter(lastNode);          //设置光标位置为插入内容的末尾
-          contentRange.collapse(true);                   //移动光标位置到末尾
-          sel.removeAllRanges();                  //移出所有选区
-          sel.addRange(contentRange);             //添加修改后的选区
-      }
   }
 }
 function changeBusi(busiClassName, wangyuanClassName) {
   var busi = $("."+busiClassName).val()
   $("."+wangyuanClassName).html('<option value="all">全部网元</option>\n')
   if(busi === 'all') {
-    if(busiClassName === 'busi2'){
-      // filterCanshu(window.canshu.canshuList)
-    }else if(busiClassName === 'busi'){
-      // filterZhiling(window.zhiling.zhilingList)
-    }
+    filterTemplate(window.template.templateList)
   }else{
-    var wangyuanList = window.wangyuan.wangyuanList.filter(function(item){
-      return item.busiId == busi
+    var wangyuanList = window.canshu.netElementList.filter(function(item){
+      return item.serviceCode == busi
     })
     $.each(wangyuanList, function(index, item) {
-      $("."+wangyuanClassName).append("<option value="+item.id+">" + item.name + "</option>\n")
+      $("."+wangyuanClassName).append("<option value="+item.netElementCode+">" + item.netElementName + "</option>\n")
     })
-    if(busiClassName === 'busi2'){
-      var canshuList = window.canshu.canshuList.filter(function(item){
-        return item.busiId == busi
-      })
-      // if(busiClassName === 'busi2') filterCanshu(canshuList)
-    }else if(busiClassName === 'busi'){
-      var zhilingList = window.zhiling.zhilingList.filter(function(item){
-        return item.busiId == busi
-      })
-      // if(busiClassName === 'busi') filterZhiling(zhilingList)
-    }
+    var templateList = window.template.templateList.filter(function(item){
+      return item.serviceCode == busi
+    })
+    filterTemplate(templateList)
   }
 }
 function changeWangyuan(busiClassName, wangyuanClassName) {
   var busi = $("."+busiClassName).val()
   var wangyuan = $("."+wangyuanClassName).val()
-  if(busiClassName === 'busi2') {
-    var canshuList = window.wangyuan.canshuList.filter(function(item){
-      if(wangyuan === 'all'){
-        return item.busiId == busi
-      }else{
-        return item.busiId == busi && item.wangyuanId == wangyuan
-      }
-    })
-    filterCanshu(canshuList)
-  }else if(busiClassName === 'busi'){
-    var zhilingList = window.zhiling.zhilingList.filter(function(item){
-      if(wangyuan === 'all'){
-        return item.busiId == busi
-      }else{
-        return item.busiId == busi && item.wangyuanId == wangyuan
-      }
-    })
-    filterZhiling(zhilingList)
-  }
+  var templateList = window.template.templateList.filter(function(item){
+    if(wangyuan === 'all'){
+      return item.serviceCode == busi
+    }else{
+      return item.serviceCode == busi && item.netElementCode == wangyuan
+    }
+  })
+  filterTemplate(templateList)
 }
-function filterCanshu(canshuList) {
-  $(".bp_zl_cs.canshu").html('')
+function filterTemplate(canshuList) {
+  $(".bp_zl_cs.template").html('')
   $.each(canshuList, function(index, item) {
-    $(".bp_zl_cs.canshu").append("<span data-id='"+item.id+"'>$(" + item.name + ")</span>\n")
+    $(".bp_zl_cs.template").append("<span data-id='"+item.templateId+" onclick=\"templateInit()\"'>$(" + item.templateName + ")</span>\n")
   })
-}
-
-function filterZhiling(zhilingList) {
-  $(".bp_zl_cs.zhiling").html('')
-  $.each(zhilingList, function(index, item) {
-    $(".bp_zl_cs.zhiling").append("<span data-id='"+item.id+"'>$(" + item.name + ")</span>\n")
-  })
-}
-function canshuInit(){
-  bpq.style.display='block';bpq02.style.display='none'
-}
-function zhilingInit(){
-  var id = event.target.dataset.id
-  bpq.style.display='block';
-  bpq02.style.display='none';
 }
 
 function templateInit(){
-  bpq02.style.display='block';
-  bpq.style.display='none';
-  // glcs.style.display='block';
-  // ycs.style.display='none'
-}
-
-function modify(){
-  var id = $('#canshuId').data("id")
-  var busiId = $('#_busiId').val()
-  var wangyuanId = $('#_wangyuanId').val()
-  var vendor = $('#_vendor').val()
-  var version = $('#_version').val()
-  var rule = $('#_rule').val()
-  var obj ={id, busiId, wangyuanId, vendor, version, rule}
-  console.log(obj);
-  postData(apiConfig['modify'],obj,function(res){
-      apiConfig['modify'].callback(res)
-    }, function(){
-      if(apiConfig.mock){
-        apiConfig['modify'].callback({
-          code: 200,
-          mock: true,
-          msg: 'success'
-        })
-      }else{
-        console.log('canshu: ajax请求失败');
-      }
-    })
-}
-function create(){
-  var name = $('#_new_name').val()
-  var busiId = $('#_new_busi').val()
-  var wangyuanId = $('#_new_wangyuan').val()
-  var vendor = $('#_new_vendor').val()
-  var version = $('#_new_version').val()
-  var rule = $('#_new_rule').val()
-  var obj ={name, busiId,wangyuanId, vendor, version, rule}
-  console.log(obj);
-  postData(apiConfig['create'],obj,function(res){
-      apiConfig['create'].callback(res)
-    }, function(){
-      if(apiConfig.mock){
-        apiConfig['create'].callback({
-          code: 200,
-          mock: true,
-          msg: 'success'
-        })
-      }else{
-        console.log('canshu: ajax请求失败');
-      }
-    })
-}
-function initNew(){
-  $(".busi3").html('<option value="all">全部业务</option>\n')
-  $.each(window.canshu.busiList, function(index, item) {
-    $(".busi3").append("<option value="+item.id+">" + item.name + "</option>\n")
+  bpq.style.display='block';
+  var id = event.target.dataset.id
+  if(id) window.tmpId = id 
+  var template = window.template.templateList.find(item=>item.templateId == window.tmpId)
+  console.log('template :>> ', template);
+  $('#g3').html('')
+  template.commandList.forEach(item=>{
+    var zhiling = window.zhiling.commandList.find(it=>it.commandId == item)
+    $('#g3').append('<span style="display: block;" data-id="'+item+'">'
+    +'<pre>'+zhiling.commandContent+'</pre></span>')
   })
-}
 
-function reset(){
-  var id = $('#canshuId').data("id")
-  canshuInit(id)
-
+  $("#_templateId").html(template.templateId)
+  $("#_templateName").html(template.templateName)
+  $("#_busi").html(template.serviceName)
+  $("#_wangyuan").html(template.netElementName)
+  $("#_vendor").html(template.supplierName)
+  $("#_scence").val('新增')
+  $("#_condition").val('')
+  $("#_description").val('')
+  $('#organId').fSelect({showSearch: false, BtnFixed:false});
+  //获取选中的值
+  function set1(arr) {
+    //第一步，先给select标签赋值
+    if(!arr) arr = ''
+    var tmp = arr.split(',');
+    $("select[name='demo']").val(tmp);
+    //第二步，给fs-optgroup下对应的option添加样式selected
+    $(".fs-option").each(function () {
+      if(tmp.indexOf($(this)['context']['dataset']['value']) != -1){
+          $(this).addClass("selected");
+      }else{
+          $(this).removeClass("selected");
+      }
+    });
+    //第三步，重新加载下拉框，使得添加了selected样式的option处于被勾选状态
+    $("select[name='demo']").fSelect('reloadDropdownLabel');
+  }
+  set1()
 }
 
 function ajaxData(url, params, callback, failCallback) {
@@ -287,45 +157,38 @@ function postData(url, data, callback, failCallback) {
   })
 }
 
-function addrow(id, value){
-  var divid = id+'_'+ new Date().getTime()
-  $('#'+id+'TD').append(
-  '<div id="'+divid+'" class="input-group" style="width: 200px;margin-top: 10px;">'+
-  '<input type="text" class="form-control input-sm" value="'+(value?value:'')+'">'+
-  '<div class="input-group-addon pointer" onclick="delrow(\''+divid+'\')"><span class="fa fa-minus"></span></div>')
-}
-function delrow(id){
-  $('#'+id).remove()
-}
-
-function reload(val){
-  ajaxData(apiConfig[val].url, {}, function(res){
-    apiConfig[val].callback(res)
+function reload(){
+  ajaxData(apiConfig['last'].url, {}, function(res){
+    apiConfig['last'].callback(res)
   }, function(){
-    console.log(val+': ajax请求失败');
+    console.log(last+': ajax请求失败');
   })
-}
-function delZhiling(el){
-  console.log($(el));
-  el.parentElement.remove()
-  if($('#g2').children().length === 0){
-    $('#tip').css('display','block')
-  }
 }
 
 function createCompose(){
-  console.log($("#organId1").val());
-  
-  fzcj.style.display='table'
+  var organId = $("#organId").val()
+  var templateId = $('#_templateId').html()
+  var scence = $('#_scence').val()
+  var condition = $('#_condition').val()
+  var obj ={templateId, scence, condition, organId}
+  console.log(obj);
+  postData(apiConfig['modify'],obj,function(res){
+      apiConfig['modify'].callback(res)
+    }, function(){
+      if(apiConfig.mock){
+        apiConfig['modify'].callback({
+          code: 200,
+          mock: true,
+          msg: 'success'
+        })
+      }else{
+        console.log(': ajax请求失败');
+      }
+    })
 }
 
-ajaxData(apiConfig['wangyuan'].url, {}, function(res){
-  apiConfig['wangyuan'].callback(res)
+ajaxData(apiConfig['last'].url, {}, function(res){
+  apiConfig['last'].callback(res)
 }, function(){
-  console.log('wangyuan: ajax请求失败');
-})
-ajaxData(apiConfig['zhiling'].url, {}, function(res){
-  apiConfig['zhiling'].callback(res)
-}, function(){
-  console.log('zhiling: ajax请求失败');
+  console.log('last: ajax请求失败');
 })
