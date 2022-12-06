@@ -1,9 +1,8 @@
 var apiConfig = {
-  'mock': true,
-  'canshu': {
+  mock: true,
+  canshu: {
     url: "../mock/xxx.json",
     callback: function(res) {
-      console.log(res)
       window.canshu = res.data
       window.canshu.netElementList = []
       window.canshu.supplierList = []
@@ -29,13 +28,13 @@ var apiConfig = {
       })
       
       $(".wangyuan").html('<option value="all">全部网元</option>\n')
-      $.each(res.data.netElementList, function(index, item) {
-        // $(".wangyuan").append("<option value="+item.id+">" + item.name + "</option>\n")
-      })
+      // $.each(res.data.netElementList, function(index, item) {
+      //   $(".wangyuan").append("<option value="+item.id+">" + item.name + "</option>\n")
+      // })
     }
   },
-  "modify": {
-    url: "/modify",
+  modify: {
+    url: "/param/modify",
     callback: function(res) {
       console.log(res)
       if(res.code === 200){
@@ -46,8 +45,8 @@ var apiConfig = {
       }
     }
   },
-  "create": {
-    url: "/create",
+  create: {
+    url: "/param/create",
     callback: function(res) {
       console.log(res)
       if(res.code === 200){

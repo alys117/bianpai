@@ -106,7 +106,7 @@ var apiConfig = {
     }
   },
   "modify": {
-    url: "/modify",
+    url: "/template/modify",
     callback: function(res) {
       console.log(res)
       if(res.code === 200){
@@ -118,7 +118,7 @@ var apiConfig = {
     }
   },
   "create": {
-    url: "/create",
+    url: "/template/create",
     callback: function(res) {
       console.log(res)
       if(res.code === 200){
@@ -317,45 +317,6 @@ function initNew(){
   $("#g2").html('')
 }
 
-function reset(){
-  var id = $('#canshuId').data("id")
-  canshuInit(id)
-
-}
-
-function ajaxData(url, params, callback, failCallback) {
-  $.ajax({
-    url: url,
-    data: params,
-    type:"get",
-    dataType: "json",
-    success: function(res, textStatus, jqXHR){
-        callback(res)
-    },
-    error: function(XMLHttpRequest, textStatus, errorThrown){
-        console.log(errorThrown)
-        failCallback()
-    }
-  })
-}
-
-function postData(url, data, callback, failCallback) {
-  $.ajax({
-    url:url,
-    contentType: "application/json",
-    type:"POST",
-    dataType:"json",
-    data:JSON.stringify(data),
-    success: function(res, textStatus, jqXHR){
-        callback(res)
-    },
-    error: function(XMLHttpRequest, textStatus, errorThrown){
-        console.log(errorThrown)
-        failCallback()
-    }
-  })
-}
-
 function reload(type){
   ajaxData(apiConfig['template'].url, {}, function(res){
     apiConfig['template'][type](res)
@@ -447,6 +408,39 @@ var ops3 = {
 };
 var sortable3 = Sortable.create(g3, ops3);
 /**********  拖拽  ***********/
+
+function ajaxData(url, params, callback, failCallback) {
+  $.ajax({
+    url: url,
+    data: params,
+    type:"get",
+    dataType: "json",
+    success: function(res, textStatus, jqXHR){
+        callback(res)
+    },
+    error: function(XMLHttpRequest, textStatus, errorThrown){
+        console.log(errorThrown)
+        failCallback()
+    }
+  })
+}
+
+function postData(url, data, callback, failCallback) {
+  $.ajax({
+    url:url,
+    contentType: "application/json",
+    type:"POST",
+    dataType:"json",
+    data:JSON.stringify(data),
+    success: function(res, textStatus, jqXHR){
+        callback(res)
+    },
+    error: function(XMLHttpRequest, textStatus, errorThrown){
+        console.log(errorThrown)
+        failCallback()
+    }
+  })
+}
 
 ajaxData(apiConfig['template'].url, {}, function(res){
   apiConfig['template'].callback(res)

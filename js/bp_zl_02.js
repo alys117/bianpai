@@ -1,6 +1,6 @@
 var apiConfig = {
   'mock': true,
-  'zl': {
+  'command': {
     url: "../mock/yyy.json",
     callback: function(res) {
       console.log(res)
@@ -105,7 +105,7 @@ var apiConfig = {
     }
   },
   "modify": {
-    url: "/modify",
+    url: "/command/modify",
     callback: function(res) {
       console.log(res)
       if(res.code === 200){
@@ -116,7 +116,7 @@ var apiConfig = {
     }
   },
   "create": {
-    url: "/create",
+    url: "/command/create",
     callback: function(res) {
       console.log(res)
       if(res.code === 200){
@@ -231,16 +231,16 @@ function changeWangyuan(busiClassName, wangyuanClassName, vendorClassName) {
     })
   }
 }
-function filterCanshu(canshuList) {
+function filterCanshu(list) {
   $(".bp_zl_cs.canshu").html('')
-  $.each(canshuList, function(index, item) {
+  $.each(list, function(index, item) {
     $(".bp_zl_cs.canshu").append("<span data-id='"+item.paramId+"' onclick=\"canshuInit()\">$(" + item.paramName + ")</span>\n")
   })
 }
 
-function filterZhiling(zhilingList) {
+function filterZhiling(list) {
   $(".bp_zl_cs.zhiling").html('')
-  $.each(zhilingList, function(index, item) {
+  $.each(list, function(index, item) {
     $(".bp_zl_cs.zhiling").append("<span data-id='"+item.commandId+"' onclick=\"zhilingInit()\">$(" + item.commandName + ")</span>\n")
   })
 }
@@ -468,10 +468,23 @@ function initNew(){
   });
 }
 
-function reset(){
-  var id = $('#canshuId').data("id")
-  canshuInit(id)
+function addrow(id, value){
+  var divid = id+'_'+ new Date().getTime()
+  $('#'+id+'TD').append(
+  '<div id="'+divid+'" class="input-group" style="width: 200px;margin-top: 10px;">'+
+  '<input type="text" class="form-control input-sm" value="'+(value?value:'')+'">'+
+  '<div class="input-group-addon pointer" onclick="delrow(\''+divid+'\')"><span class="fa fa-minus"></span></div>')
+}
+function delrow(id){
+  $('#'+id).remove()
+}
 
+function reload(type){
+  ajaxData(apiConfig['command'].url, {}, function(res){
+    apiConfig['command'][type](res)
+  }, function(){
+    console.log('command: ajax请求失败');
+  })
 }
 
 function ajaxData(url, params, callback, failCallback) {
@@ -507,32 +520,9 @@ function postData(url, data, callback, failCallback) {
   })
 }
 
-function addrow(id, value){
-  var divid = id+'_'+ new Date().getTime()
-  $('#'+id+'TD').append(
-  '<div id="'+divid+'" class="input-group" style="width: 200px;margin-top: 10px;">'+
-  '<input type="text" class="form-control input-sm" value="'+(value?value:'')+'">'+
-  '<div class="input-group-addon pointer" onclick="delrow(\''+divid+'\')"><span class="fa fa-minus"></span></div>')
-}
-function delrow(id){
-  $('#'+id).remove()
-}
-
-function reload(type){
-  ajaxData(apiConfig['zl'].url, {}, function(res){
-    apiConfig['zl'][type](res)
-  }, function(){
-    console.log('zl: ajax请求失败');
-  })
-}
-ajaxData(apiConfig['zl'].url, {}, function(res){
-  apiConfig['zl'].callback(res)
+// 请求第二页的数据
+ajaxData(apiConfig['command'].url, {}, function(res){
+  apiConfig['command'].callback(res)
 }, function(){
-  console.log('zl: ajax请求失败');
+  console.log('command: ajax请求失败');
 })
-
-// ajaxData(apiConfig['zhiling'].url, {}, function(res){
-//   apiConfig['zhiling'].callback(res)
-// }, function(){
-//   console.log('zhiling: ajax请求失败');
-// })
